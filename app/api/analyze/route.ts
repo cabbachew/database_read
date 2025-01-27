@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { toJsonWithBigInt } from "@/lib/bigIntToString";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -45,35 +44,7 @@ type ProcessedData = {
   recommendations?: string;
 };
 
-const analyzeWithRetry = async (
-  processedData: ProcessedData,
-  prompt: string,
-  maxRetries = 3
-) => {
-  for (let i = 0; i < maxRetries; i++) {
-    try {
-      const message = await anthropic.messages.create({
-        model: "claude-3-5-sonnet-latest",
-        max_tokens: 1024,
-        messages: [
-          {
-            role: "user",
-            content: `Given this engagement data: ${JSON.stringify(
-              processedData
-            )}\n\nQuestion: ${prompt}`,
-          },
-        ],
-      });
-      return message;
-    } catch (error) {
-      if (i === maxRetries - 1) throw error;
-      await new Promise((resolve) => setTimeout(resolve, 1000 * (i + 1)));
-    }
-  }
-};
-
 export async function POST(request: Request) {
-  let response: AnalyzeResponse;
   try {
     const { prompt, data } = await request.json();
 
