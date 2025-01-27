@@ -1,20 +1,42 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-// Add type safety
+// Update type definition to match all fields
 type EngagementResult = {
-  uuid: string;
-  title: string;
-  createdAt: Date;
-  status: string;
-  mentorName: string | null;
-  mentorEmail: string | null;
-  studentName: string | null;
-  firstSessionDate: Date | null;
-  sessionCount: number;
-  sessionDates: string | null;
-  publishedDates: string | null;
-  personalNotes: string | null;
+  data: {
+    title: string;
+    createdAt: Date;
+    engagementDescription: string | null;
+    status: string;
+    discipline: string | null;
+    topic: string | null;
+    addOns: string[] | null;
+    structuredGoals: string[] | null;
+    pitchDescription: string | null;
+    offering: string | null;
+    studentArchetypes: string[] | null;
+    pitchSuccessMetrics: string[] | null;
+    mentorName: string | null;
+    mentorEmail: string | null;
+    studentName: string | null;
+    acceptMessage: string | null;
+    mentorProposalDescription: string | null;
+    studentGender: string | null;
+    grade: string | null;
+    studentProfileText: string | null;
+    successMetrics: string[] | null;
+    firstSessionDate: Date | null;
+    sessionCount: number;
+    sessionDates: string | null;
+    sessionNotes: string | null;
+    sessionSummaries: string | null;
+    publishedDates: string | null;
+    personalNotes: string | null;
+    demonstratedStrengths: string | null;
+    opportunitiesForGrowth: string | null;
+    recommendations: string | null;
+  };
+  error: string | null;
 };
 
 /**
@@ -43,7 +65,12 @@ export async function GET(request: Request): Promise<Response> {
         topics: true,
         engagement_proposals: {
           include: {
-            mentor_proposals: true,
+            mentor_proposals: {
+              orderBy: {
+                createdAt: "desc",
+              },
+              take: 1,
+            },
           },
         },
         users_engagements: {
@@ -59,16 +86,18 @@ export async function GET(request: Request): Promise<Response> {
           where: {
             status: "completed",
           },
-          include: {
-            session_assets: true,
-          },
           orderBy: {
             start: "asc",
+          },
+          include: {
+            session_assets: true,
           },
         },
         engagement_reports: {
           where: {
-            publishedAt: { not: null },
+            publishedAt: {
+              not: null,
+            },
           },
           orderBy: {
             publishedAt: "asc",
@@ -93,10 +122,9 @@ export async function GET(request: Request): Promise<Response> {
     )?.users;
 
     const transformedData = {
-      uuid: results.uuid,
       title: results.title,
       createdAt: results.createdAt,
-      description: results.description,
+      engagementDescription: results.description,
       status: results.status,
       discipline: results.disciplines?.name,
       topic: results.topics?.name,
@@ -106,28 +134,30 @@ export async function GET(request: Request): Promise<Response> {
       offering: results.engagement_proposals?.offeringType,
       studentArchetypes: results.engagement_proposals?.studentArchetypes,
       pitchSuccessMetrics: results.engagement_proposals?.successMetrics,
-      mentorName: mentor?.fullName ?? null,
-      mentorEmail: mentor?.email ?? null,
-      studentName: student?.fullName ?? null,
+      mentorName: mentor?.fullName,
+      mentorEmail: mentor?.email,
+      studentName: student?.fullName,
       acceptMessage:
         results.engagement_proposals?.mentor_proposals[0]?.acceptanceMessage,
-      description:
+      mentorProposalDescription:
         results.engagement_proposals?.mentor_proposals[0]?.description,
       studentGender: student?.student_profiles[0]?.gender,
       grade: student?.student_profiles[0]?.grade,
       studentProfileText: student?.student_profiles[0]?.profileText,
       successMetrics: student?.student_profiles[0]?.successMetrics,
-      firstSessionDate: results.calendar_events[0]?.start ?? null,
+      firstSessionDate: results.calendar_events[0]?.start,
       sessionCount: results.calendar_events.length,
       sessionDates:
         results.calendar_events.length > 0
           ? results.calendar_events
+              .sort((a, b) => a.start.getTime() - b.start.getTime())
               .map((ce) => ce.start.toISOString())
               .join(", ")
           : null,
       sessionNotes:
         results.calendar_events.length > 0
           ? results.calendar_events
+              .sort((a, b) => a.start.getTime() - b.start.getTime())
               .map((ce) => ce.description)
               .filter(Boolean)
               .join(" | ")
@@ -135,29 +165,41 @@ export async function GET(request: Request): Promise<Response> {
       sessionSummaries:
         results.calendar_events.length > 0
           ? results.calendar_events
-              .map((ce) =>
-                ce.session_assets?.length
+              .sort((a, b) => a.start.getTime() - b.start.getTime())
+              .map((ce) => {
+                const assets = Array.isArray(ce.session_assets)
                   ? ce.session_assets
-                      .map((sa) => sa.summary)
-                      .filter(Boolean)
-                      .join(" | ")
-                  : ""
-              )
+                  : ce.session_assets
+                  ? [ce.session_assets]
+                  : [];
+                return assets
+                  .map((sa) => sa.summary)
+                  .filter(Boolean)
+                  .join(" | ");
+              })
               .filter(Boolean)
               .join(" | ")
           : null,
       publishedDates:
         results.engagement_reports.length > 0
-          ? results.engagement_reports
-              .map((er) => er.publishedAt?.toISOString())
-              .filter(Boolean)
-              .join(", ")
+          ? [
+              ...new Set(
+                results.engagement_reports
+                  .map((er) => er.publishedAt?.toISOString())
+                  .filter(Boolean)
+              ),
+            ].join(", ")
           : null,
       personalNotes:
         results.engagement_reports.length > 0
           ? results.engagement_reports
-              .map(
-                (er) => `${er.personalNote} (${er.publishedAt?.toISOString()})`
+              .sort(
+                (a, b) => a.publishedAt!.getTime() - b.publishedAt!.getTime()
+              )
+              .map((er) =>
+                er.personalNote && er.publishedAt
+                  ? `${er.personalNote} (${er.publishedAt.toISOString()})`
+                  : null
               )
               .filter(Boolean)
               .join(" | ")
@@ -165,11 +207,15 @@ export async function GET(request: Request): Promise<Response> {
       demonstratedStrengths:
         results.engagement_reports.length > 0
           ? results.engagement_reports
-              .map(
-                (er) =>
-                  `${
-                    er.demonstratedStrengths
-                  } (${er.publishedAt?.toISOString()})`
+              .sort(
+                (a, b) => a.publishedAt!.getTime() - b.publishedAt!.getTime()
+              )
+              .map((er) =>
+                er.demonstratedStrengths && er.publishedAt
+                  ? `${
+                      er.demonstratedStrengths
+                    } (${er.publishedAt.toISOString()})`
+                  : null
               )
               .filter(Boolean)
               .join(" | ")
@@ -177,11 +223,15 @@ export async function GET(request: Request): Promise<Response> {
       opportunitiesForGrowth:
         results.engagement_reports.length > 0
           ? results.engagement_reports
-              .map(
-                (er) =>
-                  `${
-                    er.opportunityForGrowth
-                  } (${er.publishedAt?.toISOString()})`
+              .sort(
+                (a, b) => a.publishedAt!.getTime() - b.publishedAt!.getTime()
+              )
+              .map((er) =>
+                er.opportunityForGrowth && er.publishedAt
+                  ? `${
+                      er.opportunityForGrowth
+                    } (${er.publishedAt.toISOString()})`
+                  : null
               )
               .filter(Boolean)
               .join(" | ")
@@ -189,9 +239,13 @@ export async function GET(request: Request): Promise<Response> {
       recommendations:
         results.engagement_reports.length > 0
           ? results.engagement_reports
-              .map(
-                (er) =>
-                  `${er.recommendation} (${er.publishedAt?.toISOString()})`
+              .sort(
+                (a, b) => a.publishedAt!.getTime() - b.publishedAt!.getTime()
+              )
+              .map((er) =>
+                er.recommendation && er.publishedAt
+                  ? `${er.recommendation} (${er.publishedAt.toISOString()})`
+                  : null
               )
               .filter(Boolean)
               .join(" | ")

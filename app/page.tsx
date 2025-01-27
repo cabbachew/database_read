@@ -64,7 +64,6 @@ export default function Home() {
         throw new Error(result.error);
       }
 
-      setEngagement(result);
       setData(result.data);
     } catch (error: unknown) {
       const errorMessage =
@@ -73,7 +72,6 @@ export default function Home() {
           : "Failed to fetch engagement data";
       console.error("Failed:", errorMessage);
       setError(errorMessage);
-      setEngagement(null);
       setData(null);
     } finally {
       setIsLoading(false);
