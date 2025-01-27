@@ -180,6 +180,39 @@ export default function Home() {
       )}
 
       {data && (
+        <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">
+            Formatted Details
+          </h2>
+          <dl className="grid grid-cols-[120px_1fr] gap-2">
+            <dt className="text-gray-600">Student:</dt>
+            <dd className="text-gray-900">{data.studentName || "N/A"}</dd>
+
+            <dt className="text-gray-600">Title:</dt>
+            <dd className="text-gray-900">{data.title || "N/A"}</dd>
+
+            <dt className="text-gray-600">Mentor:</dt>
+            <dd className="text-gray-900">{data.mentorName || "N/A"}</dd>
+
+            <dt className="text-gray-600">Status:</dt>
+            <dd>
+              {data.status === "scheduled" ? (
+                <span className="inline-block px-2 py-1 bg-green-100 text-green-800 rounded">
+                  Active
+                </span>
+              ) : data.status === "complete" ? (
+                <span className="inline-block px-2 py-1 bg-gray-100 text-gray-800 rounded">
+                  Complete
+                </span>
+              ) : (
+                <span className="text-gray-900">{data.status || "N/A"}</span>
+              )}
+            </dd>
+          </dl>
+        </div>
+      )}
+
+      {data && (
         <div className="p-6 border border-gray-200 rounded-lg bg-white">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-semibold text-gray-900">
