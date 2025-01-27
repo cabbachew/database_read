@@ -34,19 +34,47 @@ export default function Home() {
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setIsLoading(true);
+    setError(""); // Clear any previous errors
 
     try {
-      const response = await fetch("/api/engagement", {
-        method: "POST",
-        body: new FormData(event.currentTarget),
+      const formData = new FormData(event.currentTarget);
+      const uuid = formData.get("uuid") || "";
+
+      // Validate UUID format
+      const uuidRegex =
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(uuid.toString())) {
+        setError("Invalid UUID format");
+        return;
+      }
+
+      const response = await fetch(`/api/engagement?uuids=${uuid}`, {
+        method: "GET",
       });
-      setEngagement(await response.json());
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(
+          errorData.error || `HTTP error! status: ${response.status}`
+        );
+      }
+
+      const result = await response.json();
+      if (result.error) {
+        throw new Error(result.error);
+      }
+
+      setEngagement(result);
+      setData(result.data);
     } catch (error: unknown) {
-      console.error(
-        "Failed:",
-        error instanceof Error ? error.message : "Unknown error"
-      );
-      setEngagement({ data: null, error: "Failed to fetch engagement data" });
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Failed to fetch engagement data";
+      console.error("Failed:", errorMessage);
+      setError(errorMessage);
+      setEngagement(null);
+      setData(null);
     } finally {
       setIsLoading(false);
     }
@@ -78,6 +106,7 @@ export default function Home() {
       <form onSubmit={handleSubmit} className="mb-6">
         <input
           type="text"
+          name="uuid"
           placeholder="Enter engagement UUID"
           value={uuid}
           onChange={(e) => setUuid(e.target.value)}

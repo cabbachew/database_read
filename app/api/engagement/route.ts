@@ -1,191 +1,216 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { toJsonWithBigInt } from "@/lib/bigIntToString";
 
-type EngagementResponse = {
-  data: {
-    likes: number;
-    comments: number;
-    shares: number;
-  };
-  error?: string;
-};
-
-type RequestData = {
-  url: string;
-};
-
-type ErrorResponse = {
-  error: string;
-  data: null;
-};
-
+// Add type safety
 type EngagementResult = {
-  likes: number;
-  comments: number;
-  shares: number;
+  uuid: string;
+  title: string;
+  createdAt: Date;
+  status: string;
+  mentorName: string | null;
+  mentorEmail: string | null;
+  studentName: string | null;
+  firstSessionDate: Date | null;
+  sessionCount: number;
+  sessionDates: string | null;
+  publishedDates: string | null;
+  personalNotes: string | null;
 };
 
-type ApiResponse = {
-  data: EngagementResult | null;
-  error: string | null;
-};
-
-export async function GET(request: Request) {
+/**
+ * Example GET handler that receives an array of UUIDs
+ * (maybe from query parameters or environment, etc.),
+ * then queries only those engagements via a CTE
+ */
+export async function GET(request: Request): Promise<Response> {
   try {
-    // Extract search params
     const { searchParams } = new URL(request.url);
-    const uuid = searchParams.get("uuid"); // e.g. /api/engagement?uuid=ABC123
+    const uuidsParam = searchParams.get("uuids");
 
-    if (!uuid) {
+    if (!uuidsParam) {
       return NextResponse.json(
-        { error: "No engagement UUID provided" },
+        { data: null, error: "UUID parameter is required" },
         { status: 400 }
       );
     }
 
-    // --- Your raw SQL here, parameterized by the single UUID: ---
-    const data = await prisma.$queryRaw`
-      WITH RECURSIVE engagement_uuid AS (
-        SELECT ${uuid}::uuid as uuid
-      ),
-      mentors AS (
-        SELECT uuid, "fullName", email
-        FROM users
-        WHERE 'mentor' = ANY(roles)
-      ),
-      students AS (
-        SELECT uuid, "fullName"
-        FROM users
-        WHERE 'student' = ANY(roles)
-      ),
-      first_sessions AS (
-        SELECT
-          ce."engagementUuid",
-          MIN(ce.start) as first_session_date
-        FROM calendar_events ce
-        WHERE ce.status = 'completed'
-        GROUP BY ce."engagementUuid"
-      )
-      SELECT
-        e.title,
-        e."createdAt",
-        e.description,
-        e.status,
-        d.name AS "discipline",
-        t.name AS "topic",
-        ep."addOnSelections" AS "addOns",
-        ep."engagementGoals" AS "structuredGoals",
-        ep.goals AS "pitchDescription",
-        ep."offeringType" AS offering,
-        ep."studentArchetypes" AS "studentArchetypes",
-        ep."successMetrics" AS "pitchSuccessMetrics",
-        m."fullName" AS "mentorName",
-        m.email AS "mentorEmail",
-        s."fullName" AS "studentName",
-        mp."acceptanceMessage" AS "acceptMessage",
-        mp."description",
-        sp.gender AS "studentGender",
-        sp.grade,
-        sp."profileText" AS "studentProfileText",
-        sp."successMetrics" AS "successMetrics",
-        fs.first_session_date AS "firstSessionDate",
-        COUNT(DISTINCT ce.uuid) as "sessionCount",
-        STRING_AGG(ce.start::text,', ' ORDER BY ce.start) as "sessionDates",
-        STRING_AGG(ce.description::text, ' | ' ORDER BY ce.start) as "sessionNotes",
-        STRING_AGG(sa.summary::text,' | ' ORDER BY ce.start) as "sessionSummaries",
-        STRING_AGG(DISTINCT er."publishedAt"::text, ', ') as "publishedDates",
-        STRING_AGG(er."personalNote", ' | ' ORDER BY er."publishedAt") as "personalNotes",
-        STRING_AGG(er."demonstratedStrengths", ' | ' ORDER BY er."publishedAt") as "demonstratedStrengths",
-        STRING_AGG(er."opportunityForGrowth", ' | ' ORDER BY er."publishedAt") as "opportunitiesForGrowth",
-        STRING_AGG(er.recommendation, ' | ' ORDER BY er."publishedAt") as "recommendations"
-      FROM engagements e
-      JOIN engagement_uuid uu ON e.uuid::text = uu.uuid::text
-      LEFT JOIN disciplines d ON e."disciplineUuid" = d.uuid
-      LEFT JOIN topics t ON e."topicUuid" = t.uuid
-      LEFT JOIN engagement_proposals ep ON e."engagementProposalUuid" = ep.uuid
-      LEFT JOIN mentor_proposals mp ON mp."engagementProposalUuid" = ep.uuid
-      JOIN users_engagements ue_m ON e.uuid = ue_m."engagementUuid"
-      JOIN mentors m ON m.uuid = ue_m."userUuid"
-      JOIN users_engagements ue_s ON e.uuid = ue_s."engagementUuid"
-      JOIN students s ON s.uuid = ue_s."userUuid"
-      JOIN student_profiles sp ON sp."userUuid" = s.uuid
-      LEFT JOIN first_sessions fs ON e.uuid = fs."engagementUuid"
-      LEFT JOIN calendar_events ce ON e.uuid = ce."engagementUuid"
-        AND ce.status = 'completed'
-      LEFT JOIN session_assets sa ON ce.uuid = sa."calendarEventUuid"
-      LEFT JOIN engagement_reports er ON e.uuid = er."engagementUuid"
-        AND er."publishedAt" IS NOT NULL
-      GROUP BY
-        e.title,
-        e."createdAt",
-        e.description,
-        e.status,
-        d.name,
-        t.name,
-        ep."addOnSelections",
-        ep."engagementGoals",
-        ep.goals,
-        ep."offeringType",
-        ep."studentArchetypes",
-        ep."successMetrics",
-        m."fullName",
-        m.email,
-        s."fullName",
-        mp."acceptanceMessage",
-        mp."description",
-        sp.gender,
-        sp.grade,
-        sp."profileText",
-        sp."successMetrics",
-        fs.first_session_date
-    `;
+    const results = await prisma.engagements.findFirst({
+      where: {
+        uuid: uuidsParam,
+      },
+      include: {
+        disciplines: true,
+        topics: true,
+        engagement_proposals: {
+          include: {
+            mentor_proposals: true,
+          },
+        },
+        users_engagements: {
+          include: {
+            users: {
+              include: {
+                student_profiles: true,
+              },
+            },
+          },
+        },
+        calendar_events: {
+          where: {
+            status: "completed",
+          },
+          include: {
+            session_assets: true,
+          },
+          orderBy: {
+            start: "asc",
+          },
+        },
+        engagement_reports: {
+          where: {
+            publishedAt: { not: null },
+          },
+          orderBy: {
+            publishedAt: "asc",
+          },
+        },
+      },
+    });
 
-    // If it returns an array, we might only need the first row, or all. Adjust as needed:
-    const result = Array.isArray(data) && data.length ? data[0] : null;
-
-    if (!result) {
+    if (!results) {
       return NextResponse.json(
-        { error: "No engagement found" },
+        { data: null, error: "Engagement not found" },
         { status: 404 }
       );
     }
 
-    // Convert BigInts etc:
-    const jsonString = toJsonWithBigInt(result);
-    const parsed = JSON.parse(jsonString);
+    const mentor = results.users_engagements.find((ue) =>
+      ue.users.roles?.includes("mentor")
+    )?.users;
 
-    // Return the engagement data
-    return NextResponse.json(parsed);
-  } catch (err: any) {
-    console.error(err);
+    const student = results.users_engagements.find((ue) =>
+      ue.users.roles?.includes("student")
+    )?.users;
+
+    const transformedData = {
+      uuid: results.uuid,
+      title: results.title,
+      createdAt: results.createdAt,
+      description: results.description,
+      status: results.status,
+      discipline: results.disciplines?.name,
+      topic: results.topics?.name,
+      addOns: results.engagement_proposals?.addOnSelections,
+      structuredGoals: results.engagement_proposals?.engagementGoals,
+      pitchDescription: results.engagement_proposals?.goals,
+      offering: results.engagement_proposals?.offeringType,
+      studentArchetypes: results.engagement_proposals?.studentArchetypes,
+      pitchSuccessMetrics: results.engagement_proposals?.successMetrics,
+      mentorName: mentor?.fullName ?? null,
+      mentorEmail: mentor?.email ?? null,
+      studentName: student?.fullName ?? null,
+      acceptMessage:
+        results.engagement_proposals?.mentor_proposals[0]?.acceptanceMessage,
+      description:
+        results.engagement_proposals?.mentor_proposals[0]?.description,
+      studentGender: student?.student_profiles[0]?.gender,
+      grade: student?.student_profiles[0]?.grade,
+      studentProfileText: student?.student_profiles[0]?.profileText,
+      successMetrics: student?.student_profiles[0]?.successMetrics,
+      firstSessionDate: results.calendar_events[0]?.start ?? null,
+      sessionCount: results.calendar_events.length,
+      sessionDates:
+        results.calendar_events.length > 0
+          ? results.calendar_events
+              .map((ce) => ce.start.toISOString())
+              .join(", ")
+          : null,
+      sessionNotes:
+        results.calendar_events.length > 0
+          ? results.calendar_events
+              .map((ce) => ce.description)
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+      sessionSummaries:
+        results.calendar_events.length > 0
+          ? results.calendar_events
+              .map((ce) =>
+                ce.session_assets?.length
+                  ? ce.session_assets
+                      .map((sa) => sa.summary)
+                      .filter(Boolean)
+                      .join(" | ")
+                  : ""
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+      publishedDates:
+        results.engagement_reports.length > 0
+          ? results.engagement_reports
+              .map((er) => er.publishedAt?.toISOString())
+              .filter(Boolean)
+              .join(", ")
+          : null,
+      personalNotes:
+        results.engagement_reports.length > 0
+          ? results.engagement_reports
+              .map(
+                (er) => `${er.personalNote} (${er.publishedAt?.toISOString()})`
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+      demonstratedStrengths:
+        results.engagement_reports.length > 0
+          ? results.engagement_reports
+              .map(
+                (er) =>
+                  `${
+                    er.demonstratedStrengths
+                  } (${er.publishedAt?.toISOString()})`
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+      opportunitiesForGrowth:
+        results.engagement_reports.length > 0
+          ? results.engagement_reports
+              .map(
+                (er) =>
+                  `${
+                    er.opportunityForGrowth
+                  } (${er.publishedAt?.toISOString()})`
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+      recommendations:
+        results.engagement_reports.length > 0
+          ? results.engagement_reports
+              .map(
+                (er) =>
+                  `${er.recommendation} (${er.publishedAt?.toISOString()})`
+              )
+              .filter(Boolean)
+              .join(" | ")
+          : null,
+    };
+
+    return NextResponse.json({
+      data: transformedData,
+      error: null,
+    });
+  } catch (err) {
+    console.error("Database Error:", err);
     return NextResponse.json(
-      { error: err.message || "Unexpected error" },
+      {
+        data: null,
+        error:
+          err instanceof Error ? err.message : "An unexpected error occurred",
+      },
       { status: 500 }
     );
   }
-}
-
-export async function POST(request: Request): Promise<Response> {
-  try {
-    const { url } = (await request.json()) as RequestData;
-    const data = await fetchEngagementData(url);
-    const response: ApiResponse = { data, error: null };
-    return Response.json(response);
-  } catch (error: unknown) {
-    const response: ApiResponse = {
-      data: null,
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred",
-    };
-    return Response.json(response);
-  }
-}
-
-async function fetchEngagementData(url: string): Promise<EngagementResult> {
-  const response = await fetch(url);
-  if (!response.ok) {
-    throw new Error("Failed to fetch engagement data");
-  }
-  return { likes: 0, comments: 0, shares: 0 };
 }
