@@ -141,10 +141,10 @@ export async function GET(request: Request): Promise<Response> {
         results.engagement_proposals?.mentor_proposals[0]?.acceptanceMessage,
       mentorProposalDescription:
         results.engagement_proposals?.mentor_proposals[0]?.description,
-      studentGender: student?.student_profiles[0]?.gender,
-      grade: student?.student_profiles[0]?.grade,
-      studentProfileText: student?.student_profiles[0]?.profileText,
-      successMetrics: student?.student_profiles[0]?.successMetrics,
+      studentGender: student?.student_profiles?.[0]?.gender ?? null,
+      grade: student?.student_profiles?.[0]?.grade ?? null,
+      studentProfileText: student?.student_profiles?.[0]?.profileText ?? null,
+      successMetrics: student?.student_profiles?.[0]?.successMetrics ?? null,
       firstSessionDate: results.calendar_events[0]?.start,
       sessionCount: results.calendar_events.length,
       sessionDates:
