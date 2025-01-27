@@ -10,9 +10,17 @@ type AnalysisResult = {
   error: string | null;
 };
 
+// Add this type definition near the top of the file, after the existing AnalysisResult type
+type EngagementData = {
+  studentName: string | null;
+  title: string | null;
+  mentorName: string | null;
+  status: string;
+};
+
 export default function Home() {
   const [uuid, setUuid] = useState("");
-  const [data, setData] = useState<Record<string, unknown> | null>(null);
+  const [data, setData] = useState<EngagementData | null>(null);
   const [error, setError] = useState("");
   const [prompt, setPrompt] = useState("");
   const [analysis, setAnalysis] = useState<string>("");
