@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, FormEvent } from "react";
+import CopyButton from "./components/CopyButton";
 
 // Define types for your state variables
 type AnalysisResult = {
@@ -157,9 +158,12 @@ export default function Home() {
 
       {data && (
         <div className="p-6 border border-gray-200 rounded-lg bg-white">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">
-            Engagement Info
-          </h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Engagement Info
+            </h2>
+            <CopyButton textToCopy={JSON.stringify(data, null, 2)} />
+          </div>
           <pre className="whitespace-pre-wrap text-gray-700 font-mono text-sm">
             {JSON.stringify(data, null, 2)}
           </pre>
