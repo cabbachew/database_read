@@ -49,11 +49,15 @@ export async function POST(request: Request) {
     };
   } catch (error) {
     console.error("Anthropic API error:", error);
-    response = {
-      result: "",
-      error:
-        error instanceof Error ? error.message : "An unknown error occurred",
-    };
+    // Return a properly structured error response
+    return NextResponse.json(
+      {
+        result: "",
+        error:
+          error instanceof Error ? error.message : "An unknown error occurred",
+      },
+      { status: 500 }
+    );
   }
 
   return NextResponse.json(response);
