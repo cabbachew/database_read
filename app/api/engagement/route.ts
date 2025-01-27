@@ -145,3 +145,17 @@ export async function GET(request: Request) {
     );
   }
 }
+
+export async function POST(request: Request) {
+  let response: EngagementResponse;
+  try {
+    // ... existing code ...
+  } catch (error) {
+    response = {
+      data: { likes: 0, comments: 0, shares: 0 },
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
+  }
+  return Response.json(response);
+}

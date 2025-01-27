@@ -3,16 +3,19 @@
 import { useState } from "react";
 
 // Define types for your state variables
-type AnalysisResult = {
+interface AnalysisResult {
   result: string;
   error?: string;
-};
+}
 
-type EngagementData = {
-  likes: number;
-  comments: number;
-  shares: number;
-};
+interface EngagementData {
+  data: {
+    likes: number;
+    comments: number;
+    shares: number;
+  };
+  error?: string;
+}
 
 export default function Page() {
   const [uuid, setUuid] = useState("");

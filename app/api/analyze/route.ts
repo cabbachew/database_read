@@ -11,6 +11,7 @@ type AnalyzeResponse = {
 };
 
 export async function POST(request: Request) {
+  let response: AnalyzeResponse;
   try {
     const { prompt, data } = await request.json();
 
@@ -38,12 +39,17 @@ export async function POST(request: Request) {
       throw new Error("Expected text response from Claude");
     }
 
-    return NextResponse.json({ response: message.content[0].text });
-  } catch (err: any) {
-    console.error("Anthropic API error:", err);
-    return NextResponse.json(
-      { error: err.message || "Failed to analyze data" },
-      { status: 500 }
-    );
+    response = {
+      result: message.content[0].text,
+      error: undefined,
+    };
+  } catch (error) {
+    console.error("Anthropic API error:", error);
+    response = {
+      result: "",
+      error:
+        error instanceof Error ? error.message : "An unknown error occurred",
+    };
   }
+  return NextResponse.json(response);
 }

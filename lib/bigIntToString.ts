@@ -1,6 +1,14 @@
+type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
 export function toJsonWithBigInt(
-  obj: Record<string, unknown>
-): Record<string, unknown> {
+  obj: Record<string, JsonValue>
+): Record<string, JsonValue> {
   return JSON.stringify(obj, (key, value) =>
     typeof value === "bigint" ? value.toString() : value
   );
