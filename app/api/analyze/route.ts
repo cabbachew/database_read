@@ -29,6 +29,10 @@ export async function POST(request: Request) {
       ],
     });
 
+    if (message.content[0].type !== "text") {
+      throw new Error("Expected text response from Claude");
+    }
+
     return NextResponse.json({ response: message.content[0].text });
   } catch (err: any) {
     console.error("Anthropic API error:", err);
