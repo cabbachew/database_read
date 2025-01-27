@@ -31,6 +31,8 @@ export default function Home() {
     event.preventDefault();
     setIsSearchLoading(true);
     setError(""); // Clear any previous errors
+    setPrompt(""); // Clear previous prompt
+    setAnalysis(""); // Clear previous analysis
 
     try {
       const formData = new FormData(event.currentTarget);
