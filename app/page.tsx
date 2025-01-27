@@ -13,10 +13,6 @@ export default function Home() {
   const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState("");
   const [prompt, setPrompt] = useState("");
-  const [analysis, setAnalysis] = useState<string>("");
-  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
-    null
-  );
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -82,9 +78,7 @@ export default function Home() {
       const result: AnalysisResult = await response.json();
       if (result.error) {
         setError(result.error);
-        setAnalysis("");
       } else {
-        setAnalysis(result.result);
         setError("");
       }
     } catch (error: unknown) {
@@ -95,7 +89,6 @@ export default function Home() {
       setError(
         error instanceof Error ? error.message : "An unknown error occurred"
       );
-      setAnalysis("");
     }
   };
 
@@ -140,13 +133,6 @@ export default function Home() {
         </form>
       )}
 
-      {analysis && (
-        <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">Analysis</h2>
-          <p className="whitespace-pre-wrap text-gray-700">{analysis}</p>
-        </div>
-      )}
-
       {error && (
         <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
           <strong className="text-red-700">Error:</strong>{" "}
@@ -164,8 +150,6 @@ export default function Home() {
           </pre>
         </div>
       )}
-
-      {analysisResult && <div>{/* Display analysis result */}</div>}
 
       {isLoading && <p>Loading...</p>}
     </main>
