@@ -16,6 +16,11 @@ type RequestData = {
   // add other expected request properties
 };
 
+type ErrorResponse = {
+  error: string;
+  data: null;
+};
+
 export async function GET(request: Request) {
   try {
     // Extract search params
@@ -152,14 +157,18 @@ export async function GET(request: Request) {
 }
 
 export async function POST(request: Request) {
-  let response: EngagementResponse;
+  let response: EngagementResponse | ErrorResponse;
   try {
-    const data: RequestData = await request.json();
-    // Use data.url instead of directly using request
-    // ... existing code ...
+    const requestData: RequestData = await request.json();
+    // Use requestData.url in your logic
+    const result = // ... your engagement calculation logic
+      (response = {
+        data: result,
+        error: null,
+      });
   } catch (error) {
     response = {
-      data: { likes: 0, comments: 0, shares: 0 },
+      data: null,
       error:
         error instanceof Error ? error.message : "An unknown error occurred",
     };

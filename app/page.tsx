@@ -22,18 +22,14 @@ type FormEvent = {
   target: HTMLFormElement;
 };
 
-interface Props {
-  // Add any props if needed
-}
-
-export default function Home(props: Props) {
+export default function Home() {
   const [uuid, setUuid] = useState("");
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const [analysis, setAnalysis] = useState("");
-  const [analyzing, setAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<string>("");
+  const [analyzing, setAnalyzing] = useState<boolean>(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
@@ -43,6 +39,7 @@ export default function Home(props: Props) {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
+    setAnalyzing(true);
     const formData = new FormData(event.target);
     setError("");
     setData(null);
@@ -54,6 +51,7 @@ export default function Home(props: Props) {
       if (!uuid || !validUuid.test(uuid)) {
         setError("Please enter a valid UUID format");
         setLoading(false);
+        setAnalyzing(false);
         return;
       }
 
@@ -74,15 +72,18 @@ export default function Home(props: Props) {
       }
 
       setData(data);
+      await handleAnalyze(formData);
+      await handleEngagement(formData);
     } catch (err: any) {
       console.error("Fetch error:", err);
       setError(err.message || "Something went wrong");
     } finally {
       setLoading(false);
+      setAnalyzing(false);
     }
   };
 
-  const handleAnalyze = async (formData: FormData) => {
+  const handleAnalyze = async (formData: FormData): Promise<void> => {
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -90,12 +91,15 @@ export default function Home(props: Props) {
       });
       const result: AnalysisResult = await response.json();
       setAnalysisResult(result);
+      setAnalysis(result.result);
     } catch (error) {
-      console.error("Analysis failed:", error);
+      if (error instanceof Error) {
+        console.error("Analysis failed:", error.message);
+      }
     }
   };
 
-  const handleEngagement = async (formData: FormData) => {
+  const handleEngagement = async (formData: FormData): Promise<void> => {
     try {
       const response = await fetch("/api/engagement", {
         method: "POST",
@@ -104,7 +108,9 @@ export default function Home(props: Props) {
       const result: EngagementData = await response.json();
       setEngagementData(result);
     } catch (error) {
-      console.error("Engagement check failed:", error);
+      if (error instanceof Error) {
+        console.error("Engagement check failed:", error.message);
+      }
     }
   };
 
