@@ -167,30 +167,24 @@ type EngagementResponse = {
 };
 
 export async function POST(request: Request): Promise<Response> {
-  let response: EngagementResponse;
   try {
-    const requestData: RequestData = await request.json();
-    const engagementResult = await fetchEngagementData(requestData.url);
-
-    response = {
-      data: engagementResult,
-      error: null,
-    };
+    const { url } = (await request.json()) as RequestData;
+    const data = await fetchEngagementData(url);
+    return Response.json({ data, error: null });
   } catch (error: unknown) {
-    response = {
+    return Response.json({
       data: null,
       error:
         error instanceof Error ? error.message : "An unknown error occurred",
-    };
+    });
   }
-  return Response.json(response);
 }
 
 async function fetchEngagementData(url: string): Promise<EngagementResult> {
-  // Placeholder implementation
-  return {
-    likes: 0,
-    comments: 0,
-    shares: 0,
-  };
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch engagement data");
+  }
+  // Process response...
+  return { likes: 0, comments: 0, shares: 0 };
 }

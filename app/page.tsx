@@ -28,9 +28,7 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
-  const [engagementData, setEngagementData] = useState<EngagementData | null>(
-    null
-  );
+  const [result, setResult] = useState<EngagementData | null>(null);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
@@ -72,8 +70,8 @@ export default function Home() {
         method: "POST",
         body: formData,
       });
-      const result: EngagementData = await response.json();
-      setEngagementData(result);
+      const data = await response.json();
+      setResult(data);
     } catch (error: unknown) {
       console.error(
         "Engagement check failed:",
@@ -153,7 +151,7 @@ export default function Home() {
 
       {analysisResult && <div>{/* Display analysis result */}</div>}
 
-      {engagementData && <div>{/* Display engagement data */}</div>}
+      {result && <div>{/* Display engagement data */}</div>}
     </main>
   );
 }
