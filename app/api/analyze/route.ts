@@ -11,8 +11,42 @@ type AnalyzeResponse = {
   error?: string;
 };
 
+type ProcessedData = {
+  title?: string;
+  createdAt?: Date;
+  engagementDescription?: string;
+  status?: string;
+  discipline?: string;
+  topic?: string;
+  addOns?: string[];
+  structuredGoals?: string[];
+  pitchDescription?: string;
+  offering?: string;
+  studentArchetypes?: string[];
+  pitchSuccessMetrics?: string[];
+  mentorName?: string;
+  mentorEmail?: string;
+  studentName?: string;
+  acceptMessage?: string;
+  mentorProposalDescription?: string;
+  studentGender?: string;
+  grade?: string;
+  studentProfileText?: string;
+  successMetrics?: string[];
+  firstSessionDate?: Date;
+  sessionCount?: number;
+  sessionDates?: string;
+  sessionNotes?: string;
+  sessionSummaries?: string;
+  publishedDates?: string;
+  personalNotes?: string;
+  demonstratedStrengths?: string;
+  opportunitiesForGrowth?: string;
+  recommendations?: string;
+};
+
 const analyzeWithRetry = async (
-  processedData: any,
+  processedData: ProcessedData,
   prompt: string,
   maxRetries = 3
 ) => {
@@ -56,19 +90,37 @@ export async function POST(request: Request) {
     // Calculate approximate token size
     const dataString = JSON.stringify(processedData);
     if (dataString.length > 100000) {
-      // Approximate token limit
-      // Truncate or summarize large text fields
+      // Define text fields that might need truncation
+      const longTextFields = [
+        "sessionNotes",
+        "sessionSummaries",
+        "pitchDescription",
+        "mentorProposalDescription",
+        "studentProfileText",
+        "personalNotes",
+        "demonstratedStrengths",
+        "opportunitiesForGrowth",
+        "recommendations",
+      ];
+
+      // Calculate available length per field (rough estimation)
+      const maxLengthPerField = Math.floor(80000 / longTextFields.length);
+
       const truncatedData = {
         ...processedData,
-        sessionNotes:
-          typeof processedData?.sessionNotes === "string"
-            ? processedData.sessionNotes.slice(0, 1000) + "..."
-            : processedData?.sessionNotes,
-        sessionSummaries:
-          typeof processedData?.sessionSummaries === "string"
-            ? processedData.sessionSummaries.slice(0, 1000) + "..."
-            : processedData?.sessionSummaries,
+        ...Object.fromEntries(
+          longTextFields.map((field) => {
+            const value = processedData[field as keyof ProcessedData];
+            return [
+              field,
+              typeof value === "string" && value.length > maxLengthPerField
+                ? value.slice(0, maxLengthPerField) + "..."
+                : value,
+            ];
+          })
+        ),
       };
+
       const message = await analyzeWithRetry(truncatedData, prompt);
 
       if (!message || !message.content?.[0]?.type) {
