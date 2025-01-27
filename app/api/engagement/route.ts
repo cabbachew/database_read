@@ -161,11 +161,6 @@ type EngagementResult = {
   shares: number;
 };
 
-type EngagementResponse = {
-  data: EngagementResult | null;
-  error: string | null;
-};
-
 export async function POST(request: Request): Promise<Response> {
   try {
     const { url } = (await request.json()) as RequestData;
@@ -185,6 +180,5 @@ async function fetchEngagementData(url: string): Promise<EngagementResult> {
   if (!response.ok) {
     throw new Error("Failed to fetch engagement data");
   }
-  // Process response...
   return { likes: 0, comments: 0, shares: 0 };
 }

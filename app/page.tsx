@@ -8,7 +8,7 @@ type AnalysisResult = {
   error: string | null;
 };
 
-type EngagementData = {
+type EngagementResult = {
   data: {
     likes: number;
     comments: number;
@@ -28,23 +28,26 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
-  const [result, setResult] = useState<EngagementData | null>(null);
+  const [result, setResult] = useState<EngagementResult | null>(null);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>): Promise<void> => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setAnalyzing(true);
-    const formData = new FormData(event.currentTarget);
 
-    return Promise.all([handleAnalyze(formData), handleEngagement(formData)])
-      .catch((error: unknown) => {
-        console.error(
-          "Form submission failed:",
-          error instanceof Error ? error.message : "Unknown error"
-        );
-      })
-      .finally(() => {
-        setAnalyzing(false);
+    try {
+      const response = await fetch("/api/engagement", {
+        method: "POST",
+        body: new FormData(event.currentTarget),
       });
+      setResult(await response.json());
+    } catch (error: unknown) {
+      console.error(
+        "Failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
+    } finally {
+      setAnalyzing(false);
+    }
   };
 
   const handleAnalyze = async (formData: FormData): Promise<void> => {
@@ -59,22 +62,6 @@ export default function Home() {
     } catch (error: unknown) {
       console.error(
         "Analysis failed:",
-        error instanceof Error ? error.message : "Unknown error"
-      );
-    }
-  };
-
-  const handleEngagement = async (formData: FormData): Promise<void> => {
-    try {
-      const response = await fetch("/api/engagement", {
-        method: "POST",
-        body: formData,
-      });
-      const data = await response.json();
-      setResult(data);
-    } catch (error: unknown) {
-      console.error(
-        "Engagement check failed:",
         error instanceof Error ? error.message : "Unknown error"
       );
     }
