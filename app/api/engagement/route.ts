@@ -13,7 +13,6 @@ type EngagementResponse = {
 
 type RequestData = {
   url: string;
-  // add other expected request properties
 };
 
 type ErrorResponse = {
@@ -178,7 +177,6 @@ export async function POST(request: Request): Promise<Response> {
       error: null,
     };
   } catch (error: unknown) {
-    // Explicitly type the error
     response = {
       data: null,
       error:
@@ -189,9 +187,7 @@ export async function POST(request: Request): Promise<Response> {
 }
 
 async function fetchEngagementData(url: string): Promise<EngagementResult> {
-  // Actual implementation using the url parameter
-  const result = await fetch(url); // Use the url parameter
-  // Process result...
+  // Placeholder implementation
   return {
     likes: 0,
     comments: 0,

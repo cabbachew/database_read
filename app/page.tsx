@@ -32,55 +32,21 @@ export default function Home() {
     null
   );
 
-  const handleSubmit = async (
-    event: FormEvent<HTMLFormElement>
-  ): Promise<void> => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>): Promise<void> => {
     event.preventDefault();
     setAnalyzing(true);
     const formData = new FormData(event.currentTarget);
-    setError("");
-    setData(null);
-    setLoading(true);
 
-    try {
-      const validUuid =
-        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-      if (!uuid || !validUuid.test(uuid)) {
-        setError("Please enter a valid UUID format");
-        setLoading(false);
+    return Promise.all([handleAnalyze(formData), handleEngagement(formData)])
+      .catch((error: unknown) => {
+        console.error(
+          "Form submission failed:",
+          error instanceof Error ? error.message : "Unknown error"
+        );
+      })
+      .finally(() => {
         setAnalyzing(false);
-        return;
-      }
-
-      const res = await fetch(
-        `/api/engagement?uuid=${encodeURIComponent(uuid)}`,
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-          },
-        }
-      );
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch engagement");
-      }
-
-      setData(data);
-      await handleAnalyze(formData);
-      await handleEngagement(formData);
-    } catch (error: unknown) {
-      console.error(
-        "Fetch error:",
-        error instanceof Error ? error.message : "Unknown error"
-      );
-      setError(error instanceof Error ? error.message : "Something went wrong");
-    } finally {
-      setLoading(false);
-      setAnalyzing(false);
-    }
+      });
   };
 
   const handleAnalyze = async (formData: FormData): Promise<void> => {
