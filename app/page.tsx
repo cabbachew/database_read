@@ -15,11 +15,12 @@ export default function Home() {
   const [error, setError] = useState("");
   const [prompt, setPrompt] = useState("");
   const [analysis, setAnalysis] = useState<string>("");
-  const [isLoading, setIsLoading] = useState(false);
+  const [isSearchLoading, setIsSearchLoading] = useState(false);
+  const [isAnalysisLoading, setIsAnalysisLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setIsLoading(true);
+    setIsSearchLoading(true);
     setError(""); // Clear any previous errors
 
     try {
@@ -60,7 +61,7 @@ export default function Home() {
       setError(errorMessage);
       setData(null);
     } finally {
-      setIsLoading(false);
+      setIsSearchLoading(false);
     }
   };
 
@@ -68,7 +69,7 @@ export default function Home() {
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
-    setIsLoading(true);
+    setIsAnalysisLoading(true);
     try {
       const response = await fetch("/api/analyze", {
         method: "POST",
@@ -97,7 +98,7 @@ export default function Home() {
         error instanceof Error ? error.message : "An unknown error occurred"
       );
     } finally {
-      setIsLoading(false);
+      setIsAnalysisLoading(false);
     }
   };
 
@@ -115,14 +116,25 @@ export default function Home() {
           value={uuid}
           onChange={(e) => setUuid(e.target.value)}
           className="w-80 mr-3 px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+          disabled={isSearchLoading}
         />
         <button
           type="submit"
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+          disabled={isSearchLoading}
         >
-          Search
+          {isSearchLoading ? "Searching..." : "Search"}
         </button>
       </form>
+
+      {isSearchLoading && uuid && (
+        <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
+          <div className="flex items-center space-x-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            <p className="text-gray-600">Looking up engagement...</p>
+          </div>
+        </div>
+      )}
 
       {data && (
         <form onSubmit={handleAnalyze} className="mb-6">
@@ -132,17 +144,28 @@ export default function Home() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             className="w-full mb-3 px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isAnalysisLoading}
           />
           <button
             type="submit"
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
+            disabled={isAnalysisLoading}
           >
-            Analyze
+            {isAnalysisLoading ? "Analyzing..." : "Analyze"}
           </button>
         </form>
       )}
 
-      {analysis && (
+      {isAnalysisLoading && prompt && (
+        <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
+          <div className="flex items-center space-x-2">
+            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+            <p className="text-gray-600">Analyzing your question...</p>
+          </div>
+        </div>
+      )}
+
+      {analysis && !isAnalysisLoading && (
         <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
           <h2 className="text-xl font-semibold mb-4 text-gray-900">Analysis</h2>
           <p className="whitespace-pre-wrap text-gray-700">{analysis}</p>
@@ -169,8 +192,6 @@ export default function Home() {
           </pre>
         </div>
       )}
-
-      {isLoading && <p>Loading...</p>}
     </main>
   );
 }
