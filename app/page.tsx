@@ -1,23 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, FormEvent } from "react";
 
 // Define types for your state variables
-interface AnalysisResult {
+type AnalysisResult = {
   result: string;
-  error?: string;
-}
+  error: string | null;
+};
 
-interface EngagementData {
+type EngagementData = {
   data: {
     likes: number;
     comments: number;
     shares: number;
-  };
-  error?: string;
-}
-
-type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
+  } | null;
+  error: string | null;
+};
 
 export default function Home() {
   const [uuid, setUuid] = useState("");
@@ -34,7 +32,7 @@ export default function Home() {
     null
   );
 
-  const handleSubmit = async (event: FormSubmitEvent) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setAnalyzing(true);
     const formData = new FormData(event.currentTarget);
@@ -90,9 +88,10 @@ export default function Home() {
       setAnalysisResult(result);
       setAnalysis(result.result);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Analysis failed:", error.message);
-      }
+      console.error(
+        "Analysis failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     }
   };
 
@@ -105,9 +104,10 @@ export default function Home() {
       const result: EngagementData = await response.json();
       setEngagementData(result);
     } catch (error) {
-      if (error instanceof Error) {
-        console.error("Engagement check failed:", error.message);
-      }
+      console.error(
+        "Engagement check failed:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
     }
   };
 

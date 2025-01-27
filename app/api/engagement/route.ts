@@ -156,16 +156,24 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
-  let response: EngagementResponse | ErrorResponse;
+type EngagementResult = {
+  likes: number;
+  comments: number;
+  shares: number;
+};
+
+type EngagementResponse = {
+  data: EngagementResult | null;
+  error: string | null;
+};
+
+export async function POST(request: Request): Promise<Response> {
+  let response: EngagementResponse;
   try {
     const requestData: RequestData = await request.json();
-    // Use requestData.url to fetch engagement data
-    const engagementResult = {
-      likes: 0, // Replace with actual data
-      comments: 0, // Replace with actual data
-      shares: 0, // Replace with actual data
-    };
+    const engagementResult: EngagementResult = await fetchEngagementData(
+      requestData.url
+    );
 
     response = {
       data: engagementResult,
@@ -179,4 +187,13 @@ export async function POST(request: Request) {
     };
   }
   return Response.json(response);
+}
+
+async function fetchEngagementData(url: string): Promise<EngagementResult> {
+  // Implementation of your engagement data fetching
+  return {
+    likes: 0,
+    comments: 0,
+    shares: 0,
+  };
 }
