@@ -20,6 +20,17 @@ type ErrorResponse = {
   data: null;
 };
 
+type EngagementResult = {
+  likes: number;
+  comments: number;
+  shares: number;
+};
+
+type ApiResponse = {
+  data: EngagementResult | null;
+  error: string | null;
+};
+
 export async function GET(request: Request) {
   try {
     // Extract search params
@@ -155,23 +166,19 @@ export async function GET(request: Request) {
   }
 }
 
-type EngagementResult = {
-  likes: number;
-  comments: number;
-  shares: number;
-};
-
 export async function POST(request: Request): Promise<Response> {
   try {
     const { url } = (await request.json()) as RequestData;
     const data = await fetchEngagementData(url);
-    return Response.json({ data, error: null });
+    const response: ApiResponse = { data, error: null };
+    return Response.json(response);
   } catch (error: unknown) {
-    return Response.json({
+    const response: ApiResponse = {
       data: null,
       error:
         error instanceof Error ? error.message : "An unknown error occurred",
-    });
+    };
+    return Response.json(response);
   }
 }
 

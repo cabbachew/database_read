@@ -28,25 +28,27 @@ export default function Home() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
-  const [result, setResult] = useState<EngagementResult | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [engagement, setEngagement] = useState<EngagementResult | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setAnalyzing(true);
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/engagement", {
         method: "POST",
         body: new FormData(event.currentTarget),
       });
-      setResult(await response.json());
+      setEngagement(await response.json());
     } catch (error: unknown) {
       console.error(
         "Failed:",
         error instanceof Error ? error.message : "Unknown error"
       );
+      setEngagement({ data: null, error: "Failed to fetch engagement data" });
     } finally {
-      setAnalyzing(false);
+      setIsLoading(false);
     }
   };
 
@@ -138,7 +140,15 @@ export default function Home() {
 
       {analysisResult && <div>{/* Display analysis result */}</div>}
 
-      {result && <div>{/* Display engagement data */}</div>}
+      {isLoading && <p>Loading...</p>}
+      {engagement?.error && <p>Error: {engagement.error}</p>}
+      {engagement?.data && (
+        <div>
+          <p>Likes: {engagement.data.likes}</p>
+          <p>Comments: {engagement.data.comments}</p>
+          <p>Shares: {engagement.data.shares}</p>
+        </div>
+      )}
     </main>
   );
 }
