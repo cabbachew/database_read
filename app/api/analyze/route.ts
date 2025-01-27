@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { toJsonWithBigInt } from "@/lib/bigIntToString";
 
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
@@ -29,7 +30,7 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: `Given this engagement data: ${JSON.stringify(
-            data
+            toJsonWithBigInt(data)
           )}\n\nQuestion: ${prompt}`,
         },
       ],
