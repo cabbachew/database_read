@@ -84,44 +84,30 @@ export async function POST(request: Request) {
       );
     }
 
-    // Ensure data is an object before processing
-    const processedData = data ? toJsonWithBigInt(data) : {};
+    // Add timeout to Claude API call
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000); // 30 second timeout
 
-    // Calculate approximate token size
-    const dataString = JSON.stringify(processedData);
-    if (dataString.length > 100000) {
-      // Define text fields that might need truncation
-      const longTextFields = [
-        "sessionNotes",
-        "sessionSummaries",
-        "pitchDescription",
-        "mentorProposalDescription",
-        "studentProfileText",
-        "personalNotes",
-        "demonstratedStrengths",
-        "opportunitiesForGrowth",
-        "recommendations",
-      ];
+    try {
+      const message = await anthropic.messages.create(
+        {
+          model: "claude-3-5-sonnet-latest",
+          max_tokens: 1024,
+          messages: [
+            {
+              role: "user",
+              content: `Given this engagement data: ${JSON.stringify(
+                data
+              )}\n\nQuestion: ${prompt}`,
+            },
+          ],
+        },
+        {
+          signal: controller.signal,
+        }
+      );
 
-      // Calculate available length per field (rough estimation)
-      const maxLengthPerField = Math.floor(80000 / longTextFields.length);
-
-      const truncatedData = {
-        ...processedData,
-        ...Object.fromEntries(
-          longTextFields.map((field) => {
-            const value = processedData[field as keyof ProcessedData];
-            return [
-              field,
-              typeof value === "string" && value.length > maxLengthPerField
-                ? value.slice(0, maxLengthPerField) + "..."
-                : value,
-            ];
-          })
-        ),
-      };
-
-      const message = await analyzeWithRetry(truncatedData, prompt);
+      clearTimeout(timeout);
 
       if (!message || !message.content?.[0]?.type) {
         throw new Error("Invalid response from Claude");
@@ -133,39 +119,33 @@ export async function POST(request: Request) {
 
       return NextResponse.json({
         result: message.content[0].text,
-        error: undefined,
+        error: null,
       });
+    } catch (error: unknown) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "name" in error &&
+        error.name === "AbortError"
+      ) {
+        return NextResponse.json(
+          { result: "", error: "Request timed out" },
+          { status: 504 }
+        );
+      }
+      throw error;
     }
-
-    const message = await analyzeWithRetry(processedData, prompt);
-
-    if (!message || !message.content?.[0]?.type) {
-      throw new Error("Invalid response from Claude");
-    }
-
-    if (message.content[0].type !== "text") {
-      throw new Error("Expected text response from Claude");
-    }
-
-    response = {
-      result: message.content[0].text,
-      error: undefined,
-    };
   } catch (error) {
-    console.error("Analysis error details:", {
-      error,
-      errorMessage: error instanceof Error ? error.message : "Unknown error",
-      errorStack: error instanceof Error ? error.stack : undefined,
-    });
+    console.error("Analysis error:", error);
     return NextResponse.json(
       {
         result: "",
         error:
-          error instanceof Error ? error.message : "An unknown error occurred",
+          error instanceof Error
+            ? error.message
+            : "An unexpected error occurred",
       },
       { status: 500 }
     );
   }
-
-  return NextResponse.json(response);
 }
