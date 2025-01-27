@@ -160,12 +160,17 @@ export async function POST(request: Request) {
   let response: EngagementResponse | ErrorResponse;
   try {
     const requestData: RequestData = await request.json();
-    // Use requestData.url in your logic
-    const result = // ... your engagement calculation logic
-      (response = {
-        data: result,
-        error: null,
-      });
+    // Use requestData.url to fetch engagement data
+    const engagementResult = {
+      likes: 0, // Replace with actual data
+      comments: 0, // Replace with actual data
+      shares: 0, // Replace with actual data
+    };
+
+    response = {
+      data: engagementResult,
+      error: null,
+    };
   } catch (error) {
     response = {
       data: null,

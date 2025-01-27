@@ -17,10 +17,7 @@ interface EngagementData {
   error?: string;
 }
 
-type FormEvent = {
-  preventDefault: () => void;
-  target: HTMLFormElement;
-};
+type FormSubmitEvent = React.FormEvent<HTMLFormElement>;
 
 export default function Home() {
   const [uuid, setUuid] = useState("");
@@ -37,10 +34,10 @@ export default function Home() {
     null
   );
 
-  const handleSubmit = async (event: FormEvent) => {
+  const handleSubmit = async (event: FormSubmitEvent) => {
     event.preventDefault();
     setAnalyzing(true);
-    const formData = new FormData(event.target);
+    const formData = new FormData(event.currentTarget);
     setError("");
     setData(null);
     setLoading(true);
