@@ -8,15 +8,6 @@ type AnalysisResult = {
   error: string | null;
 };
 
-type EngagementResult = {
-  data: {
-    likes: number;
-    comments: number;
-    shares: number;
-  } | null;
-  error: string | null;
-};
-
 export default function Home() {
   const [uuid, setUuid] = useState("");
   const [data, setData] = useState<Record<string, unknown> | null>(null);
