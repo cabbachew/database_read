@@ -54,7 +54,7 @@ export default function ExportFormattedPDFButton({
         { label: "Status:", value: getStatusBadge(data.status) },
       ];
 
-      fields.forEach((field, index) => {
+      fields.forEach((field) => {
         // Draw label
         doc.setFont("helvetica", "normal");
         doc.setTextColor(75, 85, 99); // text-gray-600
