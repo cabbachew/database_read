@@ -35,7 +35,7 @@ export default function Home() {
         return;
       }
 
-      const response = await fetch(`/api/engagement?uuids=${uuid}`, {
+      const response = await fetch(`/api/engagement?uuid=${uuid}`, {
         method: "GET",
       });
 
