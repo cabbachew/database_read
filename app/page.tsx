@@ -81,7 +81,13 @@ export default function Home() {
   ): Promise<void> => {
     event.preventDefault();
     setIsAnalysisLoading(true);
+    setError(""); // Clear previous errors
+
     try {
+      if (!prompt.trim()) {
+        throw new Error("Please enter a question to analyze");
+      }
+
       const response = await fetch("/api/analyze", {
         method: "POST",
         headers: {
@@ -94,11 +100,18 @@ export default function Home() {
       });
 
       const result: AnalysisResult = await response.json();
+
+      if (!response.ok) {
+        throw new Error(
+          result.error || `HTTP error! status: ${response.status}`
+        );
+      }
+
       if (result.error) {
         setError(result.error);
       } else {
         setError("");
-        setAnalysis(result.result); // Add this line to update the analysis state
+        setAnalysis(result.result);
       }
     } catch (error: unknown) {
       console.error(
@@ -108,6 +121,7 @@ export default function Home() {
       setError(
         error instanceof Error ? error.message : "An unknown error occurred"
       );
+      setAnalysis(""); // Clear previous analysis on error
     } finally {
       setIsAnalysisLoading(false);
     }

@@ -16,9 +16,9 @@ export async function POST(request: Request) {
   try {
     const { prompt, data } = await request.json();
 
-    if (!prompt) {
+    if (!prompt || prompt.trim() === "") {
       return NextResponse.json(
-        { error: "No prompt provided" },
+        { result: "", error: "No prompt provided" },
         { status: 400 }
       );
     }
@@ -49,7 +49,6 @@ export async function POST(request: Request) {
     };
   } catch (error) {
     console.error("Anthropic API error:", error);
-    // Return a properly structured error response
     return NextResponse.json(
       {
         result: "",
