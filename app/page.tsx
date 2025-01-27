@@ -2,6 +2,18 @@
 
 import { useState } from "react";
 
+// Define types for your state variables
+type AnalysisResult = {
+  result: string;
+  error?: string;
+};
+
+type EngagementData = {
+  likes: number;
+  comments: number;
+  shares: number;
+};
+
 export default function Page() {
   const [uuid, setUuid] = useState("");
   const [data, setData] = useState<any>(null);
@@ -10,6 +22,12 @@ export default function Page() {
   const [prompt, setPrompt] = useState("");
   const [analysis, setAnalysis] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
+    null
+  );
+  const [engagementData, setEngagementData] = useState<EngagementData | null>(
+    null
+  );
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

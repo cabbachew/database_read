@@ -2,6 +2,15 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { toJsonWithBigInt } from "@/lib/bigIntToString";
 
+type EngagementResponse = {
+  data: {
+    likes: number;
+    comments: number;
+    shares: number;
+  };
+  error?: string;
+};
+
 export async function GET(request: Request) {
   try {
     // Extract search params

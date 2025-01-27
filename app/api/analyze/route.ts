@@ -5,6 +5,11 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
+type AnalyzeResponse = {
+  result: string;
+  error?: string;
+};
+
 export async function POST(request: Request) {
   try {
     const { prompt, data } = await request.json();
