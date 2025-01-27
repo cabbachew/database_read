@@ -23,6 +23,9 @@ export async function POST(request: Request) {
       );
     }
 
+    // Ensure data is an object before processing
+    const processedData = data ? toJsonWithBigInt(data) : {};
+
     const message = await anthropic.messages.create({
       model: "claude-3-sonnet-20240229",
       max_tokens: 1024,
@@ -30,7 +33,7 @@ export async function POST(request: Request) {
         {
           role: "user",
           content: `Given this engagement data: ${JSON.stringify(
-            toJsonWithBigInt(data)
+            processedData
           )}\n\nQuestion: ${prompt}`,
         },
       ],
@@ -52,5 +55,6 @@ export async function POST(request: Request) {
         error instanceof Error ? error.message : "An unknown error occurred",
     };
   }
+
   return NextResponse.json(response);
 }
