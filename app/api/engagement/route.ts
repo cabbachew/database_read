@@ -40,16 +40,15 @@ export type EngagementResult = {
 };
 
 /**
- * Example GET handler that receives an array of UUIDs
- * (maybe from query parameters or environment, etc.),
- * then queries only those engagements via a CTE
+ * GET handler that receives a single UUID via query parameter
+ * and returns the corresponding engagement with all related data
  */
 export async function GET(request: Request): Promise<Response> {
   try {
     const { searchParams } = new URL(request.url);
-    const uuidsParam = searchParams.get("uuids");
+    const uuid = searchParams.get("uuid");
 
-    if (!uuidsParam) {
+    if (!uuid) {
       return NextResponse.json(
         { data: null, error: "UUID parameter is required" },
         { status: 400 }
@@ -58,7 +57,7 @@ export async function GET(request: Request): Promise<Response> {
 
     const results = await prisma.engagements.findFirst({
       where: {
-        uuid: uuidsParam,
+        uuid: uuid,
       },
       include: {
         disciplines: true,
