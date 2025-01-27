@@ -11,6 +11,11 @@ type EngagementResponse = {
   error?: string;
 };
 
+type RequestData = {
+  url: string;
+  // add other expected request properties
+};
+
 export async function GET(request: Request) {
   try {
     // Extract search params
@@ -149,6 +154,8 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   let response: EngagementResponse;
   try {
+    const data: RequestData = await request.json();
+    // Use data.url instead of directly using request
     // ... existing code ...
   } catch (error) {
     response = {

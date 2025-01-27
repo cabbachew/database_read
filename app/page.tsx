@@ -17,7 +17,16 @@ interface EngagementData {
   error?: string;
 }
 
-export default function Page() {
+type FormEvent = {
+  preventDefault: () => void;
+  target: HTMLFormElement;
+};
+
+interface Props {
+  // Add any props if needed
+}
+
+export default function Home(props: Props) {
   const [uuid, setUuid] = useState("");
   const [data, setData] = useState<any>(null);
   const [error, setError] = useState("");
@@ -32,8 +41,9 @@ export default function Page() {
     null
   );
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  const handleSubmit = async (event: FormEvent) => {
+    event.preventDefault();
+    const formData = new FormData(event.target);
     setError("");
     setData(null);
     setLoading(true);
@@ -70,39 +80,33 @@ export default function Page() {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
-  async function handleAnalyze(e: React.FormEvent) {
-    e.preventDefault();
-    if (!data) return;
-
-    setAnalyzing(true);
-    setError("");
-    setAnalysis("");
-
+  const handleAnalyze = async (formData: FormData) => {
     try {
-      const res = await fetch("/api/analyze", {
+      const response = await fetch("/api/analyze", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ prompt, data }),
+        body: formData,
       });
-
-      const result = await res.json();
-
-      if (!res.ok) {
-        throw new Error(result.error || "Failed to analyze data");
-      }
-
-      setAnalysis(result.response);
-    } catch (err: any) {
-      console.error("Analysis error:", err);
-      setError(err.message || "Failed to analyze data");
-    } finally {
-      setAnalyzing(false);
+      const result: AnalysisResult = await response.json();
+      setAnalysisResult(result);
+    } catch (error) {
+      console.error("Analysis failed:", error);
     }
-  }
+  };
+
+  const handleEngagement = async (formData: FormData) => {
+    try {
+      const response = await fetch("/api/engagement", {
+        method: "POST",
+        body: formData,
+      });
+      const result: EngagementData = await response.json();
+      setEngagementData(result);
+    } catch (error) {
+      console.error("Engagement check failed:", error);
+    }
+  };
 
   return (
     <main className="min-h-screen bg-white p-8">
@@ -172,6 +176,10 @@ export default function Page() {
           </pre>
         </div>
       )}
+
+      {analysisResult && <div>{/* Display analysis result */}</div>}
+
+      {engagementData && <div>{/* Display engagement data */}</div>}
     </main>
   );
 }
