@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 // Update type definition to match all fields
-type EngagementResult = {
+export type EngagementResult = {
   data: {
     title: string;
     createdAt: Date;

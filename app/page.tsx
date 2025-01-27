@@ -19,17 +19,14 @@ type EngagementResult = {
 
 export default function Home() {
   const [uuid, setUuid] = useState("");
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
   const [prompt, setPrompt] = useState("");
   const [analysis, setAnalysis] = useState<string>("");
-  const [analyzing, setAnalyzing] = useState<boolean>(false);
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [engagement, setEngagement] = useState<EngagementResult | null>(null);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -109,14 +106,12 @@ export default function Home() {
           value={uuid}
           onChange={(e) => setUuid(e.target.value)}
           className="w-80 mr-3 px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          disabled={loading}
         />
         <button
           type="submit"
-          disabled={loading}
           className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
         >
-          {loading ? "Searching..." : "Search"}
+          Search
         </button>
       </form>
 
@@ -128,14 +123,12 @@ export default function Home() {
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
             className="w-full mb-3 px-4 py-2 text-gray-900 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={analyzing}
           />
           <button
             type="submit"
-            disabled={analyzing}
             className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 disabled:opacity-50"
           >
-            {analyzing ? "Analyzing..." : "Analyze"}
+            Analyze
           </button>
         </form>
       )}
@@ -168,14 +161,6 @@ export default function Home() {
       {analysisResult && <div>{/* Display analysis result */}</div>}
 
       {isLoading && <p>Loading...</p>}
-      {engagement?.error && <p>Error: {engagement.error}</p>}
-      {engagement?.data && (
-        <div>
-          <p>Likes: {engagement.data.likes}</p>
-          <p>Comments: {engagement.data.comments}</p>
-          <p>Shares: {engagement.data.shares}</p>
-        </div>
-      )}
     </main>
   );
 }
