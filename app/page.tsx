@@ -66,20 +66,36 @@ export default function Home() {
     }
   };
 
-  const handleAnalyze = async (formData: FormData): Promise<void> => {
+  const handleAnalyze = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    event.preventDefault();
     try {
+      const formData = new FormData(event.currentTarget);
+      formData.append("data", JSON.stringify(data));
+
       const response = await fetch("/api/analyze", {
         method: "POST",
         body: formData,
       });
+
       const result: AnalysisResult = await response.json();
-      setAnalysisResult(result);
-      setAnalysis(result.result);
+      if (result.error) {
+        setError(result.error);
+        setAnalysis("");
+      } else {
+        setAnalysis(result.result);
+        setError("");
+      }
     } catch (error: unknown) {
       console.error(
         "Analysis failed:",
         error instanceof Error ? error.message : "Unknown error"
       );
+      setError(
+        error instanceof Error ? error.message : "An unknown error occurred"
+      );
+      setAnalysis("");
     }
   };
 
