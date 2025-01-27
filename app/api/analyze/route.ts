@@ -5,11 +5,7 @@ const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
 
-type AnalyzeResponse = {
-  result: string;
-  error?: string;
-};
-
+// Only keep ProcessedData since it matches the data structure we're analyzing
 type ProcessedData = {
   title?: string;
   createdAt?: Date;
@@ -46,7 +42,10 @@ type ProcessedData = {
 
 export async function POST(request: Request) {
   try {
-    const { prompt, data } = await request.json();
+    const { prompt, data } = (await request.json()) as {
+      prompt: string;
+      data: ProcessedData;
+    };
 
     if (!prompt || prompt.trim() === "") {
       return NextResponse.json(
