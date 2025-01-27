@@ -13,6 +13,7 @@ export default function Home() {
   const [data, setData] = useState<Record<string, unknown> | null>(null);
   const [error, setError] = useState("");
   const [prompt, setPrompt] = useState("");
+  const [analysis, setAnalysis] = useState<string>("");
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -66,13 +67,17 @@ export default function Home() {
     event: FormEvent<HTMLFormElement>
   ): Promise<void> => {
     event.preventDefault();
+    setIsLoading(true);
     try {
-      const formData = new FormData(event.currentTarget);
-      formData.append("data", JSON.stringify(data));
-
       const response = await fetch("/api/analyze", {
         method: "POST",
-        body: formData,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          prompt,
+          data,
+        }),
       });
 
       const result: AnalysisResult = await response.json();
@@ -80,6 +85,7 @@ export default function Home() {
         setError(result.error);
       } else {
         setError("");
+        setAnalysis(result.result); // Add this line to update the analysis state
       }
     } catch (error: unknown) {
       console.error(
@@ -89,6 +95,8 @@ export default function Home() {
       setError(
         error instanceof Error ? error.message : "An unknown error occurred"
       );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -131,6 +139,13 @@ export default function Home() {
             Analyze
           </button>
         </form>
+      )}
+
+      {analysis && (
+        <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
+          <h2 className="text-xl font-semibold mb-4 text-gray-900">Analysis</h2>
+          <p className="whitespace-pre-wrap text-gray-700">{analysis}</p>
+        </div>
       )}
 
       {error && (
