@@ -121,6 +121,8 @@ export async function GET(request: Request): Promise<Response> {
       ue.users.roles?.includes("student")
     )?.users;
 
+    const studentProfile = student?.student_profiles;
+
     const transformedData = {
       title: results.title,
       createdAt: results.createdAt,
@@ -141,10 +143,10 @@ export async function GET(request: Request): Promise<Response> {
         results.engagement_proposals?.mentor_proposals[0]?.acceptanceMessage,
       mentorProposalDescription:
         results.engagement_proposals?.mentor_proposals[0]?.description,
-      studentGender: student?.student_profiles?.[0]?.gender ?? null,
-      grade: student?.student_profiles?.[0]?.grade ?? null,
-      studentProfileText: student?.student_profiles?.[0]?.profileText ?? null,
-      successMetrics: student?.student_profiles?.[0]?.successMetrics ?? null,
+      studentGender: studentProfile?.gender ?? null,
+      grade: studentProfile?.grade ?? null,
+      studentProfileText: studentProfile?.profileText ?? null,
+      successMetrics: studentProfile?.successMetrics ?? null,
       firstSessionDate: results.calendar_events[0]?.start,
       sessionCount: results.calendar_events.length,
       sessionDates:
