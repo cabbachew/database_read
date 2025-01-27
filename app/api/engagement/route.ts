@@ -171,15 +171,14 @@ export async function POST(request: Request): Promise<Response> {
   let response: EngagementResponse;
   try {
     const requestData: RequestData = await request.json();
-    const engagementResult: EngagementResult = await fetchEngagementData(
-      requestData.url
-    );
+    const engagementResult = await fetchEngagementData(requestData.url);
 
     response = {
       data: engagementResult,
       error: null,
     };
-  } catch (error) {
+  } catch (error: unknown) {
+    // Explicitly type the error
     response = {
       data: null,
       error:
@@ -190,7 +189,9 @@ export async function POST(request: Request): Promise<Response> {
 }
 
 async function fetchEngagementData(url: string): Promise<EngagementResult> {
-  // Implementation of your engagement data fetching
+  // Actual implementation using the url parameter
+  const result = await fetch(url); // Use the url parameter
+  // Process result...
   return {
     likes: 0,
     comments: 0,

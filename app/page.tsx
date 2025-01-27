@@ -32,7 +32,9 @@ export default function Home() {
     null
   );
 
-  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> => {
     event.preventDefault();
     setAnalyzing(true);
     const formData = new FormData(event.currentTarget);
@@ -69,9 +71,12 @@ export default function Home() {
       setData(data);
       await handleAnalyze(formData);
       await handleEngagement(formData);
-    } catch (err: any) {
-      console.error("Fetch error:", err);
-      setError(err.message || "Something went wrong");
+    } catch (error: unknown) {
+      console.error(
+        "Fetch error:",
+        error instanceof Error ? error.message : "Unknown error"
+      );
+      setError(error instanceof Error ? error.message : "Something went wrong");
     } finally {
       setLoading(false);
       setAnalyzing(false);
@@ -87,7 +92,7 @@ export default function Home() {
       const result: AnalysisResult = await response.json();
       setAnalysisResult(result);
       setAnalysis(result.result);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(
         "Analysis failed:",
         error instanceof Error ? error.message : "Unknown error"
@@ -103,7 +108,7 @@ export default function Home() {
       });
       const result: EngagementData = await response.json();
       setEngagementData(result);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error(
         "Engagement check failed:",
         error instanceof Error ? error.message : "Unknown error"
