@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from "react";
 import CopyButton from "./components/CopyButton";
+import ExportFormattedPDFButton from "./components/ExportFormattedPDFButton";
 
 // Define types for your state variables
 type AnalysisResult = {
@@ -181,9 +182,19 @@ export default function Home() {
 
       {data && (
         <div className="mb-6 p-6 border border-gray-200 rounded-lg bg-white">
-          <h2 className="text-xl font-semibold mb-4 text-gray-900">
-            Formatted Details
-          </h2>
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-gray-900">
+              Formatted Details
+            </h2>
+            <ExportFormattedPDFButton
+              data={{
+                studentName: data.studentName as string | null,
+                title: data.title as string | null,
+                mentorName: data.mentorName as string | null,
+                status: data.status as string,
+              }}
+            />
+          </div>
           <dl className="grid grid-cols-[120px_1fr] gap-2">
             <dt className="text-gray-600">Student:</dt>
             <dd className="text-gray-900">{data.studentName || "N/A"}</dd>
