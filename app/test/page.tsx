@@ -4,6 +4,12 @@ import { useState, FormEvent } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { EngagementDataSkeleton, AnalysisSkeleton } from "./loading-states";
 import { useChat } from "ai/react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 type Analysis = {
   overview: string;
@@ -83,7 +89,7 @@ export default function TestPage() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Engagement Analysis</h1>
+      <h1 className="text-2xl font-bold mb-6">Engagement Analysis v2</h1>
 
       <form onSubmit={handleSubmit} className="mb-6">
         <input
@@ -91,7 +97,7 @@ export default function TestPage() {
           value={uuid}
           onChange={(e) => setUuid(e.target.value)}
           placeholder="Enter engagement UUID"
-          className="px-4 py-2 border rounded-lg mr-4"
+          className="px-4 py-2 border rounded-lg mr-4 w-80"
         />
         <button
           type="submit"
@@ -110,22 +116,29 @@ export default function TestPage() {
 
       {isLoading ? (
         <>
-          <EngagementDataSkeleton />
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Raw Data</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EngagementDataSkeleton />
+            </CardContent>
+          </Card>
           <AnalysisSkeleton />
         </>
       ) : (
         <>
           {data && (
-            <Card className="mb-6">
-              <CardHeader>
-                <CardTitle>Raw Engagement Data</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <pre className="whitespace-pre-wrap text-sm">
-                  {JSON.stringify(data, null, 2)}
-                </pre>
-              </CardContent>
-            </Card>
+            <Accordion type="single" collapsible className="mb-6">
+              <AccordionItem value="raw-data">
+                <AccordionTrigger>Raw Engagement Data</AccordionTrigger>
+                <AccordionContent>
+                  <pre className="whitespace-pre-wrap text-sm">
+                    {JSON.stringify(data, null, 2)}
+                  </pre>
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
           )}
 
           {analysis && (
