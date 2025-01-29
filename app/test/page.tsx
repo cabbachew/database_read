@@ -185,6 +185,12 @@ export default function TestPage() {
                   ))}
                 </div>
 
+                {chatError && (
+                  <div className="text-red-600 mb-4">
+                    Chat Error: {chatError.toString()}
+                  </div>
+                )}
+
                 <form onSubmit={handleChatSubmit} className="flex gap-2">
                   <input
                     value={input}
@@ -195,9 +201,9 @@ export default function TestPage() {
                   <button
                     type="submit"
                     className="px-4 py-2 bg-blue-500 text-white rounded-lg"
-                    disabled={!input.trim()}
+                    disabled={!input.trim() || chatIsLoading}
                   >
-                    Send
+                    {chatIsLoading ? "Sending..." : "Send"}
                   </button>
                 </form>
               </div>
