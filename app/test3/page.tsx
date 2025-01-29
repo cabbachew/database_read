@@ -174,7 +174,7 @@ const SessionTimeline = () => {
 
           {/* Session Cards */}
           <div className="space-y-8">
-            {sessions.map((session, index) => (
+            {sessions.map((session) => (
               <div key={session.id} className="relative flex">
                 {/* Timeline Circle */}
                 <div className="absolute left-12 w-6 h-6 rounded-full bg-primary border-4 border-white shadow-sm transform -translate-x-1/2" />
