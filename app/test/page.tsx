@@ -25,10 +25,16 @@ export default function TestPage() {
     input,
     handleInputChange,
     handleSubmit: handleChatSubmit,
+    error: chatError,
+    isLoading: chatIsLoading,
   } = useChat({
     api: "/api/chat",
     body: {
-      engagementData: data, // Pass engagement data as context
+      engagementData: data,
+    },
+    onError: (error) => {
+      console.error("Chat error:", error);
+      setError(error.message || "Failed to send message");
     },
   });
 
