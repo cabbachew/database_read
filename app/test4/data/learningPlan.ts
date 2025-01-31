@@ -1,218 +1,218 @@
 import { LearningPlan } from "../types";
 
-export const learningPlan: LearningPlan = {
-  title: "Personalized Learning Plan: Math & Democracy Leadership Initiative",
+// export const learningPlan: LearningPlan = {
+//   title: "Personalized Learning Plan: Math & Democracy Leadership Initiative",
 
-  overview: {
-    studentBlurb:
-      "Ashlyn is an articulate and competitive 9th grader from California who excels in math, science, and Spanish. As an experienced debater and soccer player, she combines analytical thinking with teamwork skills. While outgoing and well-spoken, Ashlyn is in an exciting phase of discovering her authentic voice and leadership style.",
+//   overview: {
+//     studentBlurb:
+//       "Ashlyn is an articulate and competitive 9th grader from California who excels in math, science, and Spanish. As an experienced debater and soccer player, she combines analytical thinking with teamwork skills. While outgoing and well-spoken, Ashlyn is in an exciting phase of discovering her authentic voice and leadership style.",
 
-    engagementBlurb:
-      "This engagement focuses on developing Ashlyn's emerging interest in the intersection of mathematical literacy and civic engagement through a multi-phase project. Starting with organizing a documentary screening of 'Outnumbered', the project will expand into creating lasting impact through content creation and potential organization building. With pathfinding support, we'll explore how this initiative can grow while discovering additional interests and leadership opportunities. The mentor will serve as both a project guide and female role model, helping Ashlyn develop her authentic leadership voice while building strategic planning skills.",
-  },
+//     engagementBlurb:
+//       "This engagement focuses on developing Ashlyn's emerging interest in the intersection of mathematical literacy and civic engagement through a multi-phase project. Starting with organizing a documentary screening of 'Outnumbered', the project will expand into creating lasting impact through content creation and potential organization building. With pathfinding support, we'll explore how this initiative can grow while discovering additional interests and leadership opportunities. The mentor will serve as both a project guide and female role model, helping Ashlyn develop her authentic leadership voice while building strategic planning skills.",
+//   },
 
-  requirements: [
-    "Session recordings via CC Notetaker for tracking progress and reflection",
-    "Project documentation including screening event materials, promotional content, and outreach strategy",
-    "Progress tracking system for screening organization timeline and milestones",
-    "Content samples (articles, blog posts, social media) related to math and democracy initiative",
-    "Portfolio of leadership development activities and outcomes",
-  ],
+//   requirements: [
+//     "Session recordings via CC Notetaker for tracking progress and reflection",
+//     "Project documentation including screening event materials, promotional content, and outreach strategy",
+//     "Progress tracking system for screening organization timeline and milestones",
+//     "Content samples (articles, blog posts, social media) related to math and democracy initiative",
+//     "Portfolio of leadership development activities and outcomes",
+//   ],
 
-  synthesizedGoal: {
-    highLevelGoal:
-      "Launch and lead a successful initiative exploring the intersection of mathematical literacy and democracy, while developing authentic leadership skills and discovering potential academic/career interests",
-    subGoals: [
-      {
-        title: "Documentary Screening Success",
-        items: [
-          "Organize and execute 'Outnumbered' documentary screening during Pi Week",
-          "Create compelling promotional materials and outreach strategy",
-          "Develop and lead engaging post-screening discussion or activity",
-          "Document event impact and gather participant feedback",
-        ],
-      },
-      {
-        title: "Content Creation & Thought Leadership",
-        items: [
-          "Write series of articles for school newspaper on math and democracy",
-          "Create blog or social media presence focused on mathematical literacy",
-          "Develop unique perspective on intersection of math and civic engagement",
-          "Build portfolio of written and multimedia content",
-        ],
-      },
-      {
-        title: "Leadership Development",
-        items: [
-          "Define personal leadership style and voice",
-          "Learn project management and strategic planning skills",
-          "Build confidence in initiative-taking and decision-making",
-          "Develop skills for building and managing partnerships",
-        ],
-      },
-      {
-        title: "Future Pathfinding",
-        items: [
-          "Explore related academic and career paths",
-          "Identify potential future projects or organizations",
-          "Connect with other youth leaders in civic engagement",
-          "Research summer programs or internships in related fields",
-        ],
-      },
-    ],
-  },
+//   synthesizedGoal: {
+//     highLevelGoal:
+//       "Launch and lead a successful initiative exploring the intersection of mathematical literacy and democracy, while developing authentic leadership skills and discovering potential academic/career interests",
+//     subGoals: [
+//       {
+//         title: "Documentary Screening Success",
+//         items: [
+//           "Organize and execute 'Outnumbered' documentary screening during Pi Week",
+//           "Create compelling promotional materials and outreach strategy",
+//           "Develop and lead engaging post-screening discussion or activity",
+//           "Document event impact and gather participant feedback",
+//         ],
+//       },
+//       {
+//         title: "Content Creation & Thought Leadership",
+//         items: [
+//           "Write series of articles for school newspaper on math and democracy",
+//           "Create blog or social media presence focused on mathematical literacy",
+//           "Develop unique perspective on intersection of math and civic engagement",
+//           "Build portfolio of written and multimedia content",
+//         ],
+//       },
+//       {
+//         title: "Leadership Development",
+//         items: [
+//           "Define personal leadership style and voice",
+//           "Learn project management and strategic planning skills",
+//           "Build confidence in initiative-taking and decision-making",
+//           "Develop skills for building and managing partnerships",
+//         ],
+//       },
+//       {
+//         title: "Future Pathfinding",
+//         items: [
+//           "Explore related academic and career paths",
+//           "Identify potential future projects or organizations",
+//           "Connect with other youth leaders in civic engagement",
+//           "Research summer programs or internships in related fields",
+//         ],
+//       },
+//     ],
+//   },
 
-  sessionStructure: {
-    firstSessionAgenda: [
-      {
-        title: "Introduction (15 min)",
-        items: [
-          "Share backgrounds and interests, especially in math, civic engagement, and leadership",
-          "Discuss mentor's relevant experiences in project development and leadership",
-          "Build initial rapport through common interests in debate and impact-driven work",
-        ],
-      },
-      {
-        title: "Project Vision & Planning (30 min)",
-        items: [
-          "Review current status of documentary screening plans",
-          "Discuss expansion possibilities beyond initial screening",
-          "Brainstorm content creation opportunities",
-          "Map out initial timeline and key decision points",
-        ],
-      },
-      {
-        title: "Action Planning (15 min)",
-        items: [
-          "Set up project documentation and tracking systems",
-          "Define immediate next steps for screening organization",
-          "Schedule standing weekly session time",
-          "Outline homework for next session",
-        ],
-      },
-    ],
-    generalSessionAgenda: [
-      {
-        title: "Check-in (10 min)",
-        items: [
-          "Personal and project updates",
-          "Review progress on previous action items",
-          "Address any challenges or roadblocks",
-          "Set session goals",
-        ],
-      },
-      {
-        title: "Core Work (40 min)",
-        items: [
-          "Focus on immediate project deliverables",
-          "Skill-building activities",
-          "Strategic planning and decision-making",
-          "Content review and feedback",
-        ],
-      },
-      {
-        title: "Wrap-up (10 min)",
-        items: [
-          "Summarize progress and insights",
-          "Set action items for coming week",
-          "Schedule any needed additional touchpoints",
-          "Preview next session focus",
-        ],
-      },
-    ],
-  },
+//   sessionStructure: {
+//     firstSessionAgenda: [
+//       {
+//         title: "Introduction (15 min)",
+//         items: [
+//           "Share backgrounds and interests, especially in math, civic engagement, and leadership",
+//           "Discuss mentor's relevant experiences in project development and leadership",
+//           "Build initial rapport through common interests in debate and impact-driven work",
+//         ],
+//       },
+//       {
+//         title: "Project Vision & Planning (30 min)",
+//         items: [
+//           "Review current status of documentary screening plans",
+//           "Discuss expansion possibilities beyond initial screening",
+//           "Brainstorm content creation opportunities",
+//           "Map out initial timeline and key decision points",
+//         ],
+//       },
+//       {
+//         title: "Action Planning (15 min)",
+//         items: [
+//           "Set up project documentation and tracking systems",
+//           "Define immediate next steps for screening organization",
+//           "Schedule standing weekly session time",
+//           "Outline homework for next session",
+//         ],
+//       },
+//     ],
+//     generalSessionAgenda: [
+//       {
+//         title: "Check-in (10 min)",
+//         items: [
+//           "Personal and project updates",
+//           "Review progress on previous action items",
+//           "Address any challenges or roadblocks",
+//           "Set session goals",
+//         ],
+//       },
+//       {
+//         title: "Core Work (40 min)",
+//         items: [
+//           "Focus on immediate project deliverables",
+//           "Skill-building activities",
+//           "Strategic planning and decision-making",
+//           "Content review and feedback",
+//         ],
+//       },
+//       {
+//         title: "Wrap-up (10 min)",
+//         items: [
+//           "Summarize progress and insights",
+//           "Set action items for coming week",
+//           "Schedule any needed additional touchpoints",
+//           "Preview next session focus",
+//         ],
+//       },
+//     ],
+//   },
 
-  roadmap: {
-    monthlyRoadmap: [
-      {
-        title: "Month 1: Foundation & Pre-Event Planning",
-        items: [
-          "Finalize documentary screening logistics and permissions",
-          "Create promotional strategy and initial materials",
-          "Write first newspaper article introducing initiative",
-          "Develop post-screening discussion format",
-          "Begin documenting journey through blog or social media",
-        ],
-      },
-      {
-        title: "Month 2: Event Execution & Initial Growth",
-        items: [
-          "Execute documentary screening event",
-          "Gather and analyze event feedback",
-          "Publish reflection piece in school newspaper",
-          "Expand content creation efforts",
-          "Research similar initiatives at other schools",
-        ],
-      },
-      {
-        title: "Month 3: Expansion & Future Planning",
-        items: [
-          "Develop proposal for ongoing initiative or club",
-          "Create resource guide for future screenings",
-          "Build connections with other student leaders",
-          "Explore summer opportunities in civic engagement",
-          "Plan next phase of project based on learnings",
-        ],
-      },
-    ],
-    weeklyRoadmap: [
-      {
-        title: "Sessions 1-2",
-        items: [
-          "Establish project vision and goals",
-          "Create detailed screening event timeline",
-          "Begin outreach to school administration",
-          "Draft initial promotional materials",
-        ],
-      },
-      {
-        title: "Sessions 3-4",
-        items: [
-          "Finalize event logistics and permissions",
-          "Develop promotional content calendar",
-          "Write first newspaper article draft",
-          "Create social media strategy",
-        ],
-      },
-      {
-        title: "Sessions 5-6",
-        items: [
-          "Design post-screening discussion format",
-          "Create event materials and handouts",
-          "Launch promotional campaign",
-          "Practice event facilitation skills",
-        ],
-      },
-      {
-        title: "Sessions 7-8",
-        items: [
-          "Final event preparation",
-          "Execute documentary screening",
-          "Collect participant feedback",
-          "Begin reflection and analysis",
-        ],
-      },
-      {
-        title: "Sessions 9-10",
-        items: [
-          "Write event reflection article",
-          "Analyze feedback and impact",
-          "Research similar initiatives",
-          "Begin planning next phase",
-        ],
-      },
-      {
-        title: "Sessions 11-12",
-        items: [
-          "Develop expansion proposal",
-          "Create resource guide",
-          "Build network of supporters",
-          "Set goals for next project phase",
-        ],
-      },
-    ],
-  },
-};
+//   roadmap: {
+//     monthlyRoadmap: [
+//       {
+//         title: "Month 1: Foundation & Pre-Event Planning",
+//         items: [
+//           "Finalize documentary screening logistics and permissions",
+//           "Create promotional strategy and initial materials",
+//           "Write first newspaper article introducing initiative",
+//           "Develop post-screening discussion format",
+//           "Begin documenting journey through blog or social media",
+//         ],
+//       },
+//       {
+//         title: "Month 2: Event Execution & Initial Growth",
+//         items: [
+//           "Execute documentary screening event",
+//           "Gather and analyze event feedback",
+//           "Publish reflection piece in school newspaper",
+//           "Expand content creation efforts",
+//           "Research similar initiatives at other schools",
+//         ],
+//       },
+//       {
+//         title: "Month 3: Expansion & Future Planning",
+//         items: [
+//           "Develop proposal for ongoing initiative or club",
+//           "Create resource guide for future screenings",
+//           "Build connections with other student leaders",
+//           "Explore summer opportunities in civic engagement",
+//           "Plan next phase of project based on learnings",
+//         ],
+//       },
+//     ],
+//     weeklyRoadmap: [
+//       {
+//         title: "Sessions 1-2",
+//         items: [
+//           "Establish project vision and goals",
+//           "Create detailed screening event timeline",
+//           "Begin outreach to school administration",
+//           "Draft initial promotional materials",
+//         ],
+//       },
+//       {
+//         title: "Sessions 3-4",
+//         items: [
+//           "Finalize event logistics and permissions",
+//           "Develop promotional content calendar",
+//           "Write first newspaper article draft",
+//           "Create social media strategy",
+//         ],
+//       },
+//       {
+//         title: "Sessions 5-6",
+//         items: [
+//           "Design post-screening discussion format",
+//           "Create event materials and handouts",
+//           "Launch promotional campaign",
+//           "Practice event facilitation skills",
+//         ],
+//       },
+//       {
+//         title: "Sessions 7-8",
+//         items: [
+//           "Final event preparation",
+//           "Execute documentary screening",
+//           "Collect participant feedback",
+//           "Begin reflection and analysis",
+//         ],
+//       },
+//       {
+//         title: "Sessions 9-10",
+//         items: [
+//           "Write event reflection article",
+//           "Analyze feedback and impact",
+//           "Research similar initiatives",
+//           "Begin planning next phase",
+//         ],
+//       },
+//       {
+//         title: "Sessions 11-12",
+//         items: [
+//           "Develop expansion proposal",
+//           "Create resource guide",
+//           "Build network of supporters",
+//           "Set goals for next project phase",
+//         ],
+//       },
+//     ],
+//   },
+// };
 
 // export const learningPlan: LearningPlan = {
 //   title:
@@ -859,4 +859,433 @@ export const learningPlan: LearningPlan = {
 //   },
 // };
 
+// export const learningPlan: LearningPlan = {
+//   title:
+//     "Personalized Learning Plan: Sports Analytics & Investment Exploration",
+
+//   overview: {
+//     studentBlurb:
+//       "Zac is a 9th grade student at Hong Kong International School who excels in competitive soccer but seeks to discover broader academic interests. While showing curiosity in various areas including statistics, math, and investing, he hasn't yet found his academic spark. As an introverted student who benefits from guided conversation, Zac is looking to develop intrinsic motivation and confidence while exploring potential interests that bridge his passion for sports with academic pursuits.",
+
+//     engagementBlurb:
+//       "This engagement focuses on discovering and nurturing Zac's academic interests through exploration of the intersection between sports, finance, and analytics. Using soccer as an entry point for engagement, we'll explore various project possibilities that could ignite his curiosity while building confidence and internal motivation. The pathfinding component will help Zac explore different fields and discover connections between his existing interests and potential academic pursuits, with special emphasis on making learning personally meaningful and engaging.",
+//   },
+
+//   requirements: [
+//     "Session recordings via CC Notetaker",
+//     "Project exploration documentation and interest tracking",
+//     "Portfolio of completed mini-projects and explorations",
+//     "Regular reflection logs on engagement and motivation",
+//     "Documentation of learning goals and progress",
+//   ],
+
+//   synthesizedGoal: {
+//     highLevelGoal:
+//       "Discover and develop genuine academic interests while building intrinsic motivation through project-based exploration of sports analytics and investing",
+//     subGoals: [
+//       {
+//         title: "Interest Discovery",
+//         items: [
+//           "Explore connections between sports and various academic fields",
+//           "Investigate different aspects of finance and investing",
+//           "Try varied project approaches to identify engaging formats",
+//           "Document emerging interests and engagement patterns",
+//         ],
+//       },
+//       {
+//         title: "Motivation Development",
+//         items: [
+//           "Build confidence through successful project completion",
+//           "Identify personal drivers and sources of engagement",
+//           "Develop goal-setting and achievement patterns",
+//           "Create connections between interests and academic growth",
+//         ],
+//       },
+//       {
+//         title: "Project Skills",
+//         items: [
+//           "Learn basic portfolio management and tracking",
+//           "Develop data analysis and visualization skills",
+//           "Practice project planning and execution",
+//           "Build presentation and communication abilities",
+//         ],
+//       },
+//       {
+//         title: "Personal Growth",
+//         items: [
+//           "Increase comfort with academic exploration",
+//           "Build self-advocacy and communication skills",
+//           "Develop growth mindset and resilience",
+//           "Create balanced approach to academics and athletics",
+//         ],
+//       },
+//     ],
+//   },
+
+//   sessionStructure: {
+//     firstSessionAgenda: [
+//       {
+//         title: "Introduction & Connection (15 min)",
+//         items: [
+//           "Share backgrounds and soccer experiences",
+//           "Discuss current interests and experiences",
+//           "Explore what makes learning engaging",
+//         ],
+//       },
+//       {
+//         title: "Interest Exploration (30 min)",
+//         items: [
+//           "Review potential project areas connecting sports and academics",
+//           "Discuss experience with investing club",
+//           "Explore different learning formats and preferences",
+//           "Identify initial areas for exploration",
+//         ],
+//       },
+//       {
+//         title: "Planning (15 min)",
+//         items: [
+//           "Set up project tracking system",
+//           "Choose first mini-project to explore",
+//           "Establish communication preferences",
+//           "Define next steps and initial tasks",
+//         ],
+//       },
+//     ],
+//     generalSessionAgenda: [
+//       {
+//         title: "Check-in (10 min)",
+//         items: [
+//           "Review week's activities and discoveries",
+//           "Discuss any challenges or insights",
+//           "Share soccer updates and connections",
+//           "Set session goals",
+//         ],
+//       },
+//       {
+//         title: "Core Work (40 min)",
+//         items: [
+//           "Project development and skill building",
+//           "Interest exploration activities",
+//           "Motivation strategy practice",
+//           "Learning connections discussion",
+//         ],
+//       },
+//       {
+//         title: "Reflection & Planning (10 min)",
+//         items: [
+//           "Document insights and progress",
+//           "Plan next exploration steps",
+//           "Set engaging homework activities",
+//           "Preview next session focus",
+//         ],
+//       },
+//     ],
+//   },
+
+//   roadmap: {
+//     monthlyRoadmap: [
+//       {
+//         title: "Month 1: Exploration & Discovery",
+//         items: [
+//           "Try different project formats (data, writing, analysis)",
+//           "Explore sports analytics basics",
+//           "Learn about investment fundamentals",
+//           "Begin tracking engagement patterns",
+//           "Complete first mini-project",
+//         ],
+//       },
+//       {
+//         title: "Month 2: Focus & Development",
+//         items: [
+//           "Deepen work in most engaging areas",
+//           "Start portfolio tracking project",
+//           "Build analytical skills through sports data",
+//           "Develop regular learning routines",
+//           "Create project presentation",
+//         ],
+//       },
+//       {
+//         title: "Month 3: Integration & Growth",
+//         items: [
+//           "Connect projects to academic interests",
+//           "Expand project scope based on interests",
+//           "Build independent work habits",
+//           "Plan longer-term learning goals",
+//           "Present project findings",
+//         ],
+//       },
+//     ],
+//     weeklyRoadmap: [
+//       {
+//         title: "Sessions 1-2",
+//         items: [
+//           "Complete interest inventory",
+//           "Explore sports analytics examples",
+//           "Begin basic investment research",
+//           "Set up project tracking system",
+//         ],
+//       },
+//       {
+//         title: "Sessions 3-4",
+//         items: [
+//           "Start first mini-project",
+//           "Learn basic data analysis tools",
+//           "Explore investment concepts",
+//           "Practice goal-setting techniques",
+//         ],
+//       },
+//       {
+//         title: "Sessions 5-6",
+//         items: [
+//           "Complete first project phase",
+//           "Review engagement patterns",
+//           "Expand into new interest areas",
+//           "Develop presentation skills",
+//         ],
+//       },
+//       {
+//         title: "Sessions 7-8",
+//         items: [
+//           "Start portfolio tracking",
+//           "Analyze sports performance data",
+//           "Build project management skills",
+//           "Review motivation strategies",
+//         ],
+//       },
+//       {
+//         title: "Sessions 9-10",
+//         items: [
+//           "Deepen project work",
+//           "Connect interests to academics",
+//           "Develop independent work habits",
+//           "Plan next project phase",
+//         ],
+//       },
+//       {
+//         title: "Sessions 11-12",
+//         items: [
+//           "Complete current project phase",
+//           "Present findings and progress",
+//           "Set long-term learning goals",
+//           "Plan next exploration areas",
+//         ],
+//       },
+//     ],
+//   },
+// };
+
+export const learningPlan: LearningPlan = {
+  title:
+    "Personalized Learning Plan: Public Health & Community Impact Research Initiative",
+
+  overview: {
+    studentBlurb:
+      "Rehan is a multifaceted 11th grader from Princeton, NJ who brings together interests in music, public health, and community engagement. As president of the Civil Dialogue Club and a teaching assistant at his local mosque, he demonstrates natural leadership and commitment to fostering understanding. A jazz trumpet player and wrestler, he balances artistic expression with athletic discipline while seeking to develop deeper confidence in his academic and personal pursuits.",
+
+    engagementBlurb:
+      "This engagement focuses on developing a significant research project that bridges Rehan's interests in public health, sustainability, and community impact. Through structured guidance in research methodology and project development, we'll help Rehan create meaningful work that reflects his authentic interests while building confidence and clarity of purpose. The pathfinding and executive functioning components will support his growth as both a researcher and leader, helping him translate his diverse talents into impactful outcomes.",
+  },
+
+  requirements: [
+    "Session recordings via CC Notetaker",
+    "Research documentation including literature review and methodology",
+    "Regular progress updates on research milestones",
+    "Project timeline and execution plan",
+    "Final research paper or publication submission",
+  ],
+
+  synthesizedGoal: {
+    highLevelGoal:
+      "Develop and execute a meaningful research project that combines interests in public health and community impact while building confidence and project management skills",
+    subGoals: [
+      {
+        title: "Research Development",
+        items: [
+          "Identify compelling research question combining interests",
+          "Master academic research methodology",
+          "Develop strong literature review skills",
+          "Create publication-worthy final paper",
+        ],
+      },
+      {
+        title: "Project Management",
+        items: [
+          "Build effective research timeline and milestones",
+          "Learn systematic documentation practices",
+          "Develop project organization skills",
+          "Master time management across activities",
+        ],
+      },
+      {
+        title: "Leadership Growth",
+        items: [
+          "Build confidence in academic pursuits",
+          "Develop clear articulation of goals and interests",
+          "Create connections between different activities",
+          "Strengthen presentation and communication skills",
+        ],
+      },
+      {
+        title: "Impact Development",
+        items: [
+          "Identify potential applications of research",
+          "Build network in areas of interest",
+          "Plan for research dissemination",
+          "Connect work to future academic goals",
+        ],
+      },
+    ],
+  },
+
+  sessionStructure: {
+    firstSessionAgenda: [
+      {
+        title: "Introduction & Vision (15 min)",
+        items: [
+          "Share backgrounds and interests",
+          "Discuss research experience and goals",
+          "Explore potential research directions",
+        ],
+      },
+      {
+        title: "Project Planning (30 min)",
+        items: [
+          "Review potential research topics",
+          "Discuss methodology approaches",
+          "Begin developing research question",
+          "Explore project timeline options",
+        ],
+      },
+      {
+        title: "Organization Setup (15 min)",
+        items: [
+          "Establish research documentation system",
+          "Set up progress tracking tools",
+          "Define communication protocols",
+          "Plan initial research steps",
+        ],
+      },
+    ],
+    generalSessionAgenda: [
+      {
+        title: "Progress Review (10 min)",
+        items: [
+          "Review week's research progress",
+          "Address any challenges",
+          "Check timeline alignment",
+          "Set session objectives",
+        ],
+      },
+      {
+        title: "Core Work (40 min)",
+        items: [
+          "Research methodology development",
+          "Content review and analysis",
+          "Writing and documentation work",
+          "Project planning and organization",
+        ],
+      },
+      {
+        title: "Next Steps (10 min)",
+        items: [
+          "Summarize key findings",
+          "Set specific research goals",
+          "Plan next week's focus",
+          "Address any concerns",
+        ],
+      },
+    ],
+  },
+
+  roadmap: {
+    monthlyRoadmap: [
+      {
+        title: "Month 1: Foundation & Focus",
+        items: [
+          "Define specific research question and scope",
+          "Complete initial literature review",
+          "Develop research methodology",
+          "Create detailed project timeline",
+          "Begin building research framework",
+        ],
+      },
+      {
+        title: "Month 2: Research Development",
+        items: [
+          "Conduct comprehensive literature review",
+          "Begin data collection or analysis",
+          "Start writing introduction and background",
+          "Research potential publication venues",
+          "Build academic network in field",
+        ],
+      },
+      {
+        title: "Month 3: Analysis & Writing",
+        items: [
+          "Complete data analysis",
+          "Draft research paper sections",
+          "Develop initial conclusions",
+          "Plan research presentation",
+          "Explore publication opportunities",
+        ],
+      },
+    ],
+    weeklyRoadmap: [
+      {
+        title: "Sessions 1-2",
+        items: [
+          "Finalize research question",
+          "Begin literature search",
+          "Set up research documentation",
+          "Create project timeline",
+        ],
+      },
+      {
+        title: "Sessions 3-4",
+        items: [
+          "Complete initial literature review",
+          "Develop methodology framework",
+          "Start research documentation",
+          "Plan data collection approach",
+        ],
+      },
+      {
+        title: "Sessions 5-6",
+        items: [
+          "Begin detailed research work",
+          "Continue literature analysis",
+          "Start writing background section",
+          "Review project progress",
+        ],
+      },
+      {
+        title: "Sessions 7-8",
+        items: [
+          "Continue research development",
+          "Begin drafting methodology section",
+          "Update literature review",
+          "Plan next research phase",
+        ],
+      },
+      {
+        title: "Sessions 9-10",
+        items: [
+          "Complete methodology section",
+          "Begin results analysis",
+          "Continue paper development",
+          "Research publication options",
+        ],
+      },
+      {
+        title: "Sessions 11-12",
+        items: [
+          "Finalize initial research phase",
+          "Complete first paper draft",
+          "Prepare presentation materials",
+          "Plan next project phase",
+        ],
+      },
+    ],
+  },
+};
 export default learningPlan;

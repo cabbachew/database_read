@@ -12,31 +12,31 @@ import ProjectRoadmap from "./components/ProjectRoadmap";
 import learningPlan from "./data/learningPlan";
 
 const LearningPlanPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [data, setData] = useState<LearningPlan>(learningPlan);
+  const [_isLoading] = useState(false);
+  const [_data] = useState<LearningPlan>(learningPlan);
 
-  if (isLoading) {
-    return (
-      <div className="p-8 max-w-4xl mx-auto">
-        <AnalysisSkeleton />
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="p-8 max-w-4xl mx-auto">
+  //       <AnalysisSkeleton />
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold mb-8">{data.title}</h1>
+      <h1 className="text-3xl font-bold mb-8">{_data.title}</h1>
 
       <div className="space-y-8">
         <div className="grid gap-8">
-          <StudentOverview overview={data.overview} />
-          <EngagementOverview overview={data.overview} />
+          <StudentOverview overview={_data.overview} />
+          <EngagementOverview overview={_data.overview} />
         </div>
 
-        <Requirements requirements={data.requirements} />
-        <GoalsSection goals={data.synthesizedGoal} />
-        <ProjectRoadmap roadmap={data.roadmap} />
-        <SessionStructure structure={data.sessionStructure} />
+        <Requirements requirements={_data.requirements} />
+        <GoalsSection goals={_data.synthesizedGoal} />
+        <ProjectRoadmap roadmap={_data.roadmap} />
+        <SessionStructure structure={_data.sessionStructure} />
       </div>
     </div>
   );
