@@ -173,9 +173,9 @@ export async function GET(
 
     return NextResponse.json({ data: transformedData, error: null });
   } catch (error) {
-    console.error("Error:", error);
+    console.error("Error fetching proposal:", error);
     return NextResponse.json(
-      { data: null, error: "Failed to generate learning plan" },
+      { data: null, error: "Failed to fetch proposal" },
       { status: 500 }
     );
   }
