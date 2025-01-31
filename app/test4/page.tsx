@@ -12,7 +12,7 @@ import ProjectRoadmap from "./components/ProjectRoadmap";
 import learningPlan from "./data/learningPlan";
 
 const LearningPlanPage = () => {
-  const [_isLoading] = useState(false);
+  // const [_isLoading] = useState(false);
   const [_data] = useState<LearningPlan>(learningPlan);
 
   // if (isLoading) {

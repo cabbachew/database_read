@@ -30,10 +30,10 @@ type EngagementOption = {
 export default function EngagementsRoadmap() {
   const [topics, setTopics] = useState<TopicOption[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<TopicOption | null>(null);
-  const [_engagements, _setEngagements] = useState<EngagementOption[]>([]);
+  const [_engagements] = useState<EngagementOption[]>([]);
   const [selectedEngagements, setSelectedEngagements] = useState<string[]>([]);
-  const [_roadmapData, _setRoadmapData] = useState(null);
-  const [_isLoading, _setIsLoading] = useState(false);
+  const [_roadmapData] = useState(null);
+  const [_isLoading] = useState(false);
 
   useEffect(() => {
     const fetchTopics = async () => {
