@@ -1,13 +1,20 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uuid: string } }
-) {
+export async function GET(request: Request) {
   try {
+    const { pathname } = new URL(request.url);
+    const uuid = pathname.split("/").pop();
+
+    if (!uuid) {
+      return NextResponse.json(
+        { data: null, error: "UUID parameter is required" },
+        { status: 400 }
+      );
+    }
+
     const proposal = await prisma.engagement_proposals.findUnique({
-      where: { uuid: params.uuid },
+      where: { uuid },
       select: {
         offeringType: true,
         goals: true,
