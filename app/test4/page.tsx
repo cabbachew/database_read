@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { LearningPlan } from "./types";
-import { AnalysisSkeleton } from "@/app/test/loading-states";
+// import { AnalysisSkeleton } from "@/app/test/loading-states";
 import StudentOverview from "./components/StudentOverview";
 import EngagementOverview from "./components/EngagementOverview";
 import Requirements from "./components/Requirements";

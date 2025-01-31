@@ -30,10 +30,10 @@ type EngagementOption = {
 export default function EngagementsRoadmap() {
   const [topics, setTopics] = useState<TopicOption[]>([]);
   const [selectedTopic, setSelectedTopic] = useState<TopicOption | null>(null);
-  const [engagements, setEngagements] = useState<EngagementOption[]>([]);
+  const [_engagements, _setEngagements] = useState<EngagementOption[]>([]);
   const [selectedEngagements, setSelectedEngagements] = useState<string[]>([]);
-  const [roadmapData, setRoadmapData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [_roadmapData, _setRoadmapData] = useState(null);
+  const [_isLoading, _setIsLoading] = useState(false);
 
   useEffect(() => {
     const fetchTopics = async () => {
@@ -82,11 +82,11 @@ export default function EngagementsRoadmap() {
       </div>
 
       {/* Engagements Checklist */}
-      {selectedTopic && engagements.length > 0 && (
+      {selectedTopic && _engagements.length > 0 && (
         <div className="mb-8">
           <h2 className="text-xl font-semibold mb-4">Select Engagements</h2>
           <div className="space-y-2">
-            {engagements.map((engagement) => (
+            {_engagements.map((engagement) => (
               <label
                 key={engagement.uuid}
                 className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50"
@@ -121,14 +121,14 @@ export default function EngagementsRoadmap() {
           onClick={() => {
             /* Generate Roadmap */
           }}
-          disabled={isLoading}
+          disabled={_isLoading}
         >
-          {isLoading ? "Generating..." : "Generate Roadmap"}
+          {_isLoading ? "Generating..." : "Generate Roadmap"}
         </Button>
       )}
 
       {/* Roadmap Display */}
-      {roadmapData && <DynamicRoadmapView data={roadmapData} />}
+      {_roadmapData && <DynamicRoadmapView data={_roadmapData} />}
     </div>
   );
 }
