@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uuid: string } }
-) {
+type Props = {
+  params: {
+    uuid: string;
+  };
+};
+
+export async function GET(request: Request, context: Props) {
   try {
     const proposal = await prisma.engagement_proposals.findUnique({
-      where: { uuid: params.uuid },
+      where: { uuid: context.params.uuid },
       select: {
         title: true,
         offeringType: true,
