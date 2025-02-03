@@ -1,5 +1,11 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { SynthesizedGoal } from "../types";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 interface Props {
   goals: SynthesizedGoal;
@@ -16,20 +22,24 @@ const GoalsSection = ({ goals }: Props) => {
           <p className="text-gray-700">{goals.highLevelGoal}</p>
         </div>
 
-        <div className="space-y-4">
+        <Accordion type="single" collapsible className="w-full">
           {goals.subGoals.map((subGoal, index) => (
-            <div key={index}>
-              <h4 className="font-medium mb-2">{subGoal.title}</h4>
-              <ul className="list-disc pl-4 space-y-1">
-                {subGoal.items.map((item, itemIndex) => (
-                  <li key={itemIndex} className="text-gray-700">
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <AccordionItem key={index} value={`item-${index}`}>
+              <AccordionTrigger className="text-left">
+                {subGoal.title}
+              </AccordionTrigger>
+              <AccordionContent>
+                <ul className="list-disc pl-4 space-y-1">
+                  {subGoal.items.map((item, itemIndex) => (
+                    <li key={itemIndex} className="text-gray-700">
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </AccordionContent>
+            </AccordionItem>
           ))}
-        </div>
+        </Accordion>
       </CardContent>
     </Card>
   );
