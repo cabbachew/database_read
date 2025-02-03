@@ -71,24 +71,8 @@ async function generateStudentBlurb(
     });
   } catch (error) {
     console.error("Failed to generate student blurb:", error);
-    // Fall back to the original template-based generation
-    let profile: StudentProfile = {};
-    try {
-      profile = profileText ? JSON.parse(profileText) : {};
-    } catch (error) {
-      console.error("Failed to parse profile text:", error);
-    }
-
-    const grade = profile?.grade || "high school";
-    const school = profile?.school || "";
-
-    return `${
-      profile.name || "The student"
-    } is a ${grade} student at ${school} who demonstrates ${
-      archetypes.includes("ACADEMIC_ACCELERATOR")
-        ? "strong academic performance"
-        : "dedication to learning"
-    }...`;
+    // Use the fallback function when Claude API fails
+    return generateFallbackStudentBlurb(profileText, archetypes);
   }
 }
 
