@@ -1074,159 +1074,574 @@ import { LearningPlan } from "../types";
 //   },
 // };
 
-export const learningPlan: LearningPlan = {
-  title:
-    "Personalized Learning Plan: Public Health & Community Impact Research Initiative",
+// export const learningPlan: LearningPlan = {
+//   title:
+//     "Personalized Learning Plan: Public Health & Community Impact Research Initiative",
 
+//   overview: {
+//     studentBlurb:
+//       "Rehan is a multifaceted 11th grader from Princeton, NJ who brings together interests in music, public health, and community engagement. As president of the Civil Dialogue Club and a teaching assistant at his local mosque, he demonstrates natural leadership and commitment to fostering understanding. A jazz trumpet player and wrestler, he balances artistic expression with athletic discipline while seeking to develop deeper confidence in his academic and personal pursuits.",
+
+//     engagementBlurb:
+//       "This engagement focuses on developing a significant research project that bridges Rehan's interests in public health, sustainability, and community impact. Through structured guidance in research methodology and project development, we'll help Rehan create meaningful work that reflects his authentic interests while building confidence and clarity of purpose. The pathfinding and executive functioning components will support his growth as both a researcher and leader, helping him translate his diverse talents into impactful outcomes.",
+//   },
+
+//   requirements: [
+//     "Session recordings via CC Notetaker",
+//     "Research documentation including literature review and methodology",
+//     "Regular progress updates on research milestones",
+//     "Project timeline and execution plan",
+//     "Final research paper or publication submission",
+//   ],
+
+//   synthesizedGoal: {
+//     highLevelGoal:
+//       "Develop and execute a meaningful research project that combines interests in public health and community impact while building confidence and project management skills",
+//     subGoals: [
+//       {
+//         title: "Research Development",
+//         items: [
+//           "Identify compelling research question combining interests",
+//           "Master academic research methodology",
+//           "Develop strong literature review skills",
+//           "Create publication-worthy final paper",
+//         ],
+//       },
+//       {
+//         title: "Project Management",
+//         items: [
+//           "Build effective research timeline and milestones",
+//           "Learn systematic documentation practices",
+//           "Develop project organization skills",
+//           "Master time management across activities",
+//         ],
+//       },
+//       {
+//         title: "Leadership Growth",
+//         items: [
+//           "Build confidence in academic pursuits",
+//           "Develop clear articulation of goals and interests",
+//           "Create connections between different activities",
+//           "Strengthen presentation and communication skills",
+//         ],
+//       },
+//       {
+//         title: "Impact Development",
+//         items: [
+//           "Identify potential applications of research",
+//           "Build network in areas of interest",
+//           "Plan for research dissemination",
+//           "Connect work to future academic goals",
+//         ],
+//       },
+//     ],
+//   },
+
+//   sessionStructure: {
+//     firstSessionAgenda: [
+//       {
+//         title: "Introduction & Vision (15 min)",
+//         items: [
+//           "Share backgrounds and interests",
+//           "Discuss research experience and goals",
+//           "Explore potential research directions",
+//         ],
+//       },
+//       {
+//         title: "Project Planning (30 min)",
+//         items: [
+//           "Review potential research topics",
+//           "Discuss methodology approaches",
+//           "Begin developing research question",
+//           "Explore project timeline options",
+//         ],
+//       },
+//       {
+//         title: "Organization Setup (15 min)",
+//         items: [
+//           "Establish research documentation system",
+//           "Set up progress tracking tools",
+//           "Define communication protocols",
+//           "Plan initial research steps",
+//         ],
+//       },
+//     ],
+//     generalSessionAgenda: [
+//       {
+//         title: "Progress Review (10 min)",
+//         items: [
+//           "Review week's research progress",
+//           "Address any challenges",
+//           "Check timeline alignment",
+//           "Set session objectives",
+//         ],
+//       },
+//       {
+//         title: "Core Work (40 min)",
+//         items: [
+//           "Research methodology development",
+//           "Content review and analysis",
+//           "Writing and documentation work",
+//           "Project planning and organization",
+//         ],
+//       },
+//       {
+//         title: "Next Steps (10 min)",
+//         items: [
+//           "Summarize key findings",
+//           "Set specific research goals",
+//           "Plan next week's focus",
+//           "Address any concerns",
+//         ],
+//       },
+//     ],
+//   },
+
+//   roadmap: {
+//     monthlyRoadmap: [
+//       {
+//         title: "Month 1: Foundation & Focus",
+//         items: [
+//           "Define specific research question and scope",
+//           "Complete initial literature review",
+//           "Develop research methodology",
+//           "Create detailed project timeline",
+//           "Begin building research framework",
+//         ],
+//       },
+//       {
+//         title: "Month 2: Research Development",
+//         items: [
+//           "Conduct comprehensive literature review",
+//           "Begin data collection or analysis",
+//           "Start writing introduction and background",
+//           "Research potential publication venues",
+//           "Build academic network in field",
+//         ],
+//       },
+//       {
+//         title: "Month 3: Analysis & Writing",
+//         items: [
+//           "Complete data analysis",
+//           "Draft research paper sections",
+//           "Develop initial conclusions",
+//           "Plan research presentation",
+//           "Explore publication opportunities",
+//         ],
+//       },
+//     ],
+//     weeklyRoadmap: [
+//       {
+//         title: "Sessions 1-2",
+//         items: [
+//           "Finalize research question",
+//           "Begin literature search",
+//           "Set up research documentation",
+//           "Create project timeline",
+//         ],
+//       },
+//       {
+//         title: "Sessions 3-4",
+//         items: [
+//           "Complete initial literature review",
+//           "Develop methodology framework",
+//           "Start research documentation",
+//           "Plan data collection approach",
+//         ],
+//       },
+//       {
+//         title: "Sessions 5-6",
+//         items: [
+//           "Begin detailed research work",
+//           "Continue literature analysis",
+//           "Start writing background section",
+//           "Review project progress",
+//         ],
+//       },
+//       {
+//         title: "Sessions 7-8",
+//         items: [
+//           "Continue research development",
+//           "Begin drafting methodology section",
+//           "Update literature review",
+//           "Plan next research phase",
+//         ],
+//       },
+//       {
+//         title: "Sessions 9-10",
+//         items: [
+//           "Complete methodology section",
+//           "Begin results analysis",
+//           "Continue paper development",
+//           "Research publication options",
+//         ],
+//       },
+//       {
+//         title: "Sessions 11-12",
+//         items: [
+//           "Finalize initial research phase",
+//           "Complete first paper draft",
+//           "Prepare presentation materials",
+//           "Plan next project phase",
+//         ],
+//       },
+//     ],
+//   },
+// };
+
+// export const learningPlan: LearningPlan = {
+//   title:
+//     "Personalized Learning Plan: Medical Science & Performance Research Initiative",
+
+//   overview: {
+//     studentBlurb:
+//       "Prabhav is a focused 9th grader at Taylor High School who demonstrates strong academic performance, particularly in biology and computer science. While initially reserved, he shows genuine enthusiasm for medicine and healthcare, complemented by interests in motor racing and technology. His involvement in HOSA, Disease Awareness Club, and senior living facility volunteering reflects his commitment to exploring healthcare pathways, while his piano playing and tennis activities showcase his well-rounded nature.",
+
+//     engagementBlurb:
+//       "This engagement focuses on developing a meaningful research project that bridges Prabhav's interests in medicine with his passion for motor racing and performance. Through structured exploration and guided project development, we'll help him discover unique intersections between healthcare and athletics/racing while building confidence in pursuing medical career pathways. The pathfinding component will support exploration of BS/MD programs while helping him create impactful projects that demonstrate his authentic interests.",
+//   },
+
+//   requirements: [
+//     "Session recordings via CC Notetaker",
+//     "Research documentation and project development materials",
+//     "Progress tracking on exploration activities and milestones",
+//     "Portfolio of healthcare-related experiences and findings",
+//     "Documentation of BS/MD program research and requirements",
+//   ],
+
+//   synthesizedGoal: {
+//     highLevelGoal:
+//       "Develop a significant research project exploring the intersection of medical science and performance while building confidence and clarity in pursuing pre-medical pathways",
+//     subGoals: [
+//       {
+//         title: "Research Development",
+//         items: [
+//           "Identify compelling research topic combining medicine and performance",
+//           "Learn scientific research methodology",
+//           "Develop literature review skills",
+//           "Create comprehensive research documentation",
+//         ],
+//       },
+//       {
+//         title: "Medical Pathway Exploration",
+//         items: [
+//           "Research BS/MD program requirements and opportunities",
+//           "Explore various medical specialties and career paths",
+//           "Identify strategic extracurricular activities",
+//           "Build understanding of medical school preparation",
+//         ],
+//       },
+//       {
+//         title: "Personal Growth",
+//         items: [
+//           "Develop confidence in academic and personal pursuits",
+//           "Build communication and presentation skills",
+//           "Create structured approach to project management",
+//           "Practice self-advocacy and networking",
+//         ],
+//       },
+//       {
+//         title: "Impact Creation",
+//         items: [
+//           "Design meaningful healthcare-related projects",
+//           "Build connections in medical community",
+//           "Develop leadership through HOSA and clubs",
+//           "Create tangible contributions to healthcare field",
+//         ],
+//       },
+//     ],
+//   },
+
+//   sessionStructure: {
+//     firstSessionAgenda: [
+//       {
+//         title: "Introduction & Discovery (15 min)",
+//         items: [
+//           "Share backgrounds and interests",
+//           "Discuss healthcare and racing passions",
+//           "Explore potential project directions",
+//         ],
+//       },
+//       {
+//         title: "Project Planning (30 min)",
+//         items: [
+//           "Review possible research areas",
+//           "Discuss BS/MD program pathways",
+//           "Explore project timeline options",
+//           "Identify initial research directions",
+//         ],
+//       },
+//       {
+//         title: "Organization Setup (15 min)",
+//         items: [
+//           "Establish project tracking system",
+//           "Set up communication protocols",
+//           "Create initial task list",
+//           "Plan next steps and assignments",
+//         ],
+//       },
+//     ],
+//     generalSessionAgenda: [
+//       {
+//         title: "Progress Review (10 min)",
+//         items: [
+//           "Review week's accomplishments",
+//           "Discuss any challenges",
+//           "Share healthcare exposure insights",
+//           "Set session objectives",
+//         ],
+//       },
+//       {
+//         title: "Core Work (40 min)",
+//         items: [
+//           "Research and project development",
+//           "Medical pathway exploration",
+//           "Skill building activities",
+//           "Strategic planning discussions",
+//         ],
+//       },
+//       {
+//         title: "Planning & Reflection (10 min)",
+//         items: [
+//           "Document progress and insights",
+//           "Set specific next steps",
+//           "Plan upcoming activities",
+//           "Address questions and concerns",
+//         ],
+//       },
+//     ],
+//   },
+
+//   roadmap: {
+//     monthlyRoadmap: [
+//       {
+//         title: "Month 1: Discovery & Direction",
+//         items: [
+//           "Identify specific research interests",
+//           "Research BS/MD program requirements",
+//           "Begin literature review process",
+//           "Create project outline and timeline",
+//           "Start building healthcare network",
+//         ],
+//       },
+//       {
+//         title: "Month 2: Development & Depth",
+//         items: [
+//           "Develop detailed research methodology",
+//           "Expand healthcare volunteering impact",
+//           "Begin data collection or analysis",
+//           "Research summer program opportunities",
+//           "Create initial project drafts",
+//         ],
+//       },
+//       {
+//         title: "Month 3: Implementation & Growth",
+//         items: [
+//           "Execute core project components",
+//           "Present initial findings or progress",
+//           "Plan summer activities and programs",
+//           "Expand project scope based on interests",
+//           "Develop next phase goals",
+//         ],
+//       },
+//     ],
+//     weeklyRoadmap: [
+//       {
+//         title: "Sessions 1-2",
+//         items: [
+//           "Define research focus area",
+//           "Create project documentation system",
+//           "Begin BS/MD program research",
+//           "Establish work routine",
+//         ],
+//       },
+//       {
+//         title: "Sessions 3-4",
+//         items: [
+//           "Start literature review",
+//           "Develop research methodology",
+//           "Plan healthcare exposure activities",
+//           "Create project timeline",
+//         ],
+//       },
+//       {
+//         title: "Sessions 5-6",
+//         items: [
+//           "Begin core research work",
+//           "Explore summer opportunities",
+//           "Develop presentation skills",
+//           "Expand healthcare network",
+//         ],
+//       },
+//       {
+//         title: "Sessions 7-8",
+//         items: [
+//           "Continue research development",
+//           "Plan volunteer activities",
+//           "Research medical specialties",
+//           "Build project portfolio",
+//         ],
+//       },
+//       {
+//         title: "Sessions 9-10",
+//         items: [
+//           "Analyze initial findings",
+//           "Prepare project presentations",
+//           "Explore leadership opportunities",
+//           "Plan next research phase",
+//         ],
+//       },
+//       {
+//         title: "Sessions 11-12",
+//         items: [
+//           "Complete first project phase",
+//           "Present research progress",
+//           "Plan summer activities",
+//           "Set long-term goals",
+//         ],
+//       },
+//     ],
+//   },
+// };
+
+export const learningPlan: LearningPlan = {
+  title: "Personalized Learning Plan: Medical Research & Pre-Med Exploration",
   overview: {
     studentBlurb:
-      "Rehan is a multifaceted 11th grader from Princeton, NJ who brings together interests in music, public health, and community engagement. As president of the Civil Dialogue Club and a teaching assistant at his local mosque, he demonstrates natural leadership and commitment to fostering understanding. A jazz trumpet player and wrestler, he balances artistic expression with athletic discipline while seeking to develop deeper confidence in his academic and personal pursuits.",
-
+      "Prabhav is a driven 9th-grade student at Taylor High School in Katy, Texas, who demonstrates strong academic performance, particularly in biology. While initially reserved, he opens up among peers and shows genuine curiosity in medicine, healthcare, and motor racing. His current involvement in HOSA, computer science club, and volunteering at a senior living facility demonstrates his early commitment to exploring healthcare-related opportunities.",
     engagementBlurb:
-      "This engagement focuses on developing a significant research project that bridges Rehan's interests in public health, sustainability, and community impact. Through structured guidance in research methodology and project development, we'll help Rehan create meaningful work that reflects his authentic interests while building confidence and clarity of purpose. The pathfinding and executive functioning components will support his growth as both a researcher and leader, helping him translate his diverse talents into impactful outcomes.",
+      "This engagement will combine structured exploration of medical career pathways with hands-on research experience. We'll focus on developing a research project that bridges Prabhav's interests in medicine and motor racing, while simultaneously building a strong foundation for potential BS/MD program applications. The pathfinding component will help identify strategic opportunities and create a clear roadmap for his pre-medical journey.",
+    mentorFitBlurb:
+      "Kevin brings particularly relevant experience as a current medical student at Northwestern who shares Prabhav's early passion for medicine. His background combining biosciences with creative pursuits demonstrates the kind of multidimensional approach that could help Prabhav explore innovative intersections between his interests in healthcare and motor racing. As a former EMT and neuroscience teacher, Kevin can provide both practical medical insights and effective mentorship.",
   },
-
   requirements: [
-    "Session recordings via CC Notetaker",
-    "Research documentation including literature review and methodology",
-    "Regular progress updates on research milestones",
-    "Project timeline and execution plan",
-    "Final research paper or publication submission",
+    "Session recordings via CC Notetaker for tracking progress and maintaining detailed records",
+    "Project artifacts including research drafts, outlines, papers, literature reviews, and presentations",
+    "Progress tracking system for research milestones",
+    "Access to student's current HOSA materials and volunteering documentation",
+    "Available weekdays (specific schedule to be confirmed with student)",
   ],
-
   synthesizedGoal: {
     highLevelGoal:
-      "Develop and execute a meaningful research project that combines interests in public health and community impact while building confidence and project management skills",
+      "Develop and execute a focused medical research project while building a strong foundation for pre-medical studies and BS/MD program preparation.",
     subGoals: [
       {
         title: "Research Development",
         items: [
-          "Identify compelling research question combining interests",
-          "Master academic research methodology",
-          "Develop strong literature review skills",
-          "Create publication-worthy final paper",
+          "Identify a specific research topic combining medical science with motorsport applications",
+          "Master fundamental research methodologies and academic writing skills",
+          "Produce a substantial research paper or project by the end of freshman spring",
+          "Learn to analyze scientific literature and synthesize findings",
         ],
       },
       {
-        title: "Project Management",
+        title: "Pre-Medical Exploration",
         items: [
-          "Build effective research timeline and milestones",
-          "Learn systematic documentation practices",
-          "Develop project organization skills",
-          "Master time management across activities",
+          "Gain comprehensive understanding of BS/MD program requirements and timelines",
+          "Create strategic plan for meaningful clinical exposure opportunities",
+          "Develop connections between current activities and long-term medical career goals",
+          "Build confidence in pursuing medical interests",
         ],
       },
       {
-        title: "Leadership Growth",
+        title: "Skill Building",
         items: [
-          "Build confidence in academic pursuits",
-          "Develop clear articulation of goals and interests",
-          "Create connections between different activities",
-          "Strengthen presentation and communication skills",
-        ],
-      },
-      {
-        title: "Impact Development",
-        items: [
-          "Identify potential applications of research",
-          "Build network in areas of interest",
-          "Plan for research dissemination",
-          "Connect work to future academic goals",
+          "Enhance scientific writing and technical communication abilities",
+          "Develop time management and project planning capabilities",
+          "Improve presentation and public speaking skills",
+          "Learn to balance multiple long-term commitments effectively",
         ],
       },
     ],
   },
-
   sessionStructure: {
     firstSessionAgenda: [
       {
-        title: "Introduction & Vision (15 min)",
+        title: "Introduction (15 min)",
         items: [
-          "Share backgrounds and interests",
-          "Discuss research experience and goals",
-          "Explore potential research directions",
+          "Get to know your mentor's journey through pre-med and medical school",
+          "Share your interests in medicine, racing, and current activities",
+          "Discuss your goals and aspirations for BS/MD programs",
         ],
       },
       {
-        title: "Project Planning (30 min)",
+        title: "Core Work (30-40 min)",
         items: [
-          "Review potential research topics",
-          "Discuss methodology approaches",
-          "Begin developing research question",
-          "Explore project timeline options",
+          "Explore potential research topics combining medicine and motorsports",
+          "Review different BS/MD program requirements and timelines",
+          "Begin developing a personalized pre-med roadmap",
+          "Set up project documentation and progress tracking systems",
+          "Create initial research project outline",
         ],
       },
       {
-        title: "Organization Setup (15 min)",
+        title: "Wrap-up (5-10 min)",
         items: [
-          "Establish research documentation system",
-          "Set up progress tracking tools",
-          "Define communication protocols",
-          "Plan initial research steps",
+          "Recap key discussion points and decisions",
+          "Establish regular meeting schedule",
+          "Define specific action items for next session",
         ],
       },
     ],
     generalSessionAgenda: [
       {
-        title: "Progress Review (10 min)",
+        title: "Opening (5-10 min)",
         items: [
-          "Review week's research progress",
-          "Address any challenges",
-          "Check timeline alignment",
-          "Set session objectives",
+          "Weekly progress check-in",
+          "Review previous session's action items",
+          "Set specific goals for current session",
         ],
       },
       {
-        title: "Core Work (40 min)",
+        title: "Core Work (40-50 min)",
         items: [
-          "Research methodology development",
-          "Content review and analysis",
-          "Writing and documentation work",
-          "Project planning and organization",
+          "Research project development",
+          "Literature review and analysis",
+          "Writing and revision work",
+          "Strategic planning for pre-med preparation",
+          "Skill-building exercises",
         ],
       },
       {
-        title: "Next Steps (10 min)",
+        title: "Wrap-up (5-10 min)",
         items: [
-          "Summarize key findings",
-          "Set specific research goals",
-          "Plan next week's focus",
-          "Address any concerns",
+          "Summarize progress made",
+          "Plan next steps and assignments",
+          "Schedule upcoming sessions",
         ],
       },
     ],
   },
-
   roadmap: {
     monthlyRoadmap: [
       {
-        title: "Month 1: Foundation & Focus",
+        title: "Month 1: Foundation Building",
         items: [
-          "Define specific research question and scope",
-          "Complete initial literature review",
-          "Develop research methodology",
+          "Complete comprehensive review of BS/MD program requirements",
+          "Identify specific research focus within medicine and motorsports",
+          "Begin preliminary literature review",
           "Create detailed project timeline",
-          "Begin building research framework",
+          "Set up research documentation system",
         ],
       },
       {
         title: "Month 2: Research Development",
         items: [
-          "Conduct comprehensive literature review",
-          "Begin data collection or analysis",
-          "Start writing introduction and background",
-          "Research potential publication venues",
-          "Build academic network in field",
+          "Complete initial literature review",
+          "Develop research question and methodology",
+          "Start drafting research paper introduction",
+          "Explore summer program opportunities",
+          "Begin identifying potential clinical volunteering positions",
         ],
       },
       {
-        title: "Month 3: Analysis & Writing",
+        title: "Month 3: Project Execution",
         items: [
-          "Complete data analysis",
-          "Draft research paper sections",
-          "Develop initial conclusions",
-          "Plan research presentation",
-          "Explore publication opportunities",
+          "Continue research paper development",
+          "Start data collection or analysis",
+          "Refine research methodology",
+          "Build connections with relevant medical professionals",
+          "Plan summer activities and commitments",
         ],
       },
     ],
@@ -1234,58 +1649,59 @@ export const learningPlan: LearningPlan = {
       {
         title: "Sessions 1-2",
         items: [
-          "Finalize research question",
-          "Begin literature search",
-          "Set up research documentation",
-          "Create project timeline",
+          "Establish mentor-mentee relationship",
+          "Create detailed pre-med preparation timeline",
+          "Begin exploring research topics",
+          "Set up project management systems",
         ],
       },
       {
         title: "Sessions 3-4",
         items: [
-          "Complete initial literature review",
-          "Develop methodology framework",
-          "Start research documentation",
-          "Plan data collection approach",
+          "Finalize research topic selection",
+          "Start literature review process",
+          "Review BS/MD program requirements",
+          "Develop summer planning strategy",
         ],
       },
       {
         title: "Sessions 5-6",
         items: [
-          "Begin detailed research work",
-          "Continue literature analysis",
-          "Start writing background section",
-          "Review project progress",
+          "Continue literature review",
+          "Begin drafting research outline",
+          "Explore clinical volunteering opportunities",
+          "Work on time management skills",
         ],
       },
       {
         title: "Sessions 7-8",
         items: [
-          "Continue research development",
-          "Begin drafting methodology section",
-          "Update literature review",
-          "Plan next research phase",
+          "Start writing research paper introduction",
+          "Develop methodology section",
+          "Research summer programs",
+          "Practice scientific writing skills",
         ],
       },
       {
         title: "Sessions 9-10",
         items: [
-          "Complete methodology section",
-          "Begin results analysis",
-          "Continue paper development",
-          "Research publication options",
+          "Continue research paper development",
+          "Begin data collection/analysis",
+          "Update pre-med activity timeline",
+          "Work on presentation skills",
         ],
       },
       {
         title: "Sessions 11-12",
         items: [
-          "Finalize initial research phase",
-          "Complete first paper draft",
-          "Prepare presentation materials",
-          "Plan next project phase",
+          "Refine research paper drafts",
+          "Plan next phase of project",
+          "Review progress toward goals",
+          "Update summer plans",
         ],
       },
     ],
   },
 };
+
 export default learningPlan;

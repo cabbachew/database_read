@@ -9,11 +9,10 @@ const GoalsSection = ({ goals }: Props) => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Goals</CardTitle>
+        <CardTitle>Learning Goals</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div>
-          <h3 className="text-lg font-medium mb-2">High Level Goal</h3>
           <p className="text-gray-700">{goals.highLevelGoal}</p>
         </div>
 

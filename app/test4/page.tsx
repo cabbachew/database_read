@@ -5,6 +5,7 @@ import { LearningPlan } from "./types";
 // import { AnalysisSkeleton } from "@/app/test/loading-states";
 import StudentOverview from "./components/StudentOverview";
 import EngagementOverview from "./components/EngagementOverview";
+import MentorFitOverview from "./components/MentorFitOverview";
 import Requirements from "./components/Requirements";
 import GoalsSection from "./components/GoalsSection";
 import SessionStructure from "./components/SessionStructure";
@@ -31,6 +32,7 @@ const LearningPlanPage = () => {
         <div className="grid gap-8">
           <StudentOverview overview={_data.overview} />
           <EngagementOverview overview={_data.overview} />
+          <MentorFitOverview overview={_data.overview} />
         </div>
 
         <Requirements requirements={_data.requirements} />
