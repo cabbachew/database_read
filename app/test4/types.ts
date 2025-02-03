@@ -1,6 +1,7 @@
 export type LearningPlanOverview = {
   studentBlurb: string;
   engagementBlurb: string;
+  mentorFitBlurb: string;
 };
 
 export type SynthesizedGoal = {
