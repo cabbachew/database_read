@@ -8,12 +8,11 @@ const anthropic = new Anthropic({
 });
 
 const PROMPT_MAPPING = {
-  studentBlurb: PROMPT_TEMPLATES.overview, // Use the new detailed overview template
-  engagementBlurb: PROMPT_TEMPLATES.overview, // Will parse specific section from response
+  overview: PROMPT_TEMPLATES.overview,
   synthesizedGoal: PROMPT_TEMPLATES.synthesizedGoal,
   sessionStructure: PROMPT_TEMPLATES.sessionStructure,
   roadmap: PROMPT_TEMPLATES.roadmap,
-};
+} as const;
 
 type LearningPlanStructure = {
   title: string;
@@ -63,13 +62,30 @@ type ClaudeContext = {
   profileText?: string;
   archetypes?: string;
   consultationNotes?: string;
+  offeringType?: string;
+  addOns?: string;
+  topic?: string;
+  goals?: string;
+  mentorMessage?: string;
+  mentorBio?: string;
+  grade?: string;
+  successMetrics?: string;
+  engagementGoals?: string;
+  studentPersonality?: string;
+  goalTaxonomy?: string;
   [key: string]: string | undefined;
 };
 
 type ClaudeResponse = {
   studentBlurb?: string;
   engagementBlurb?: string;
-  [key: string]: string | undefined;
+  mentorFitBlurb?: string;
+  highLevelGoal?: string;
+  subGoals?: Array<{ title: string; items: string[] }>;
+  firstSessionAgenda?: Array<{ title: string; items: string[] }>;
+  generalSessionAgenda?: Array<{ title: string; items: string[] }>;
+  monthlyRoadmap?: Array<{ title: string; items: string[] }>;
+  weeklyRoadmap?: Array<{ title: string; items: string[] }>;
 };
 
 async function generateStudentBlurb(
@@ -78,7 +94,7 @@ async function generateStudentBlurb(
   transcript: string
 ): Promise<string> {
   try {
-    const response = await generateWithClaude("studentBlurb", {
+    const response = await generateWithClaude("overview", {
       profileText,
       archetypes: archetypes.join(", "),
       consultationNotes: transcript,
@@ -375,9 +391,28 @@ async function generateWithClaude(
   context: ClaudeContext
 ): Promise<string | ClaudeResponse> {
   try {
+    // Create a complete context object based on section requirements
+    const enrichedContext: ClaudeContext = {
+      ...context,
+      profileText: context.profileText || "",
+      archetypes: context.archetypes || "",
+      consultationNotes: context.consultationNotes || "",
+      offeringType: context.offeringType || "",
+      addOns: context.addOns || "",
+      topic: context.topic || "",
+      goals: context.goals || "",
+      mentorMessage: context.mentorMessage || "",
+      mentorBio: context.mentorBio || "",
+      grade: context.grade || "",
+      successMetrics: context.successMetrics || "",
+      engagementGoals: context.engagementGoals || "",
+      studentPersonality: context.studentPersonality || "",
+      goalTaxonomy: context.goalTaxonomy || "",
+    };
+
     const prompt = PROMPT_MAPPING[section].replace(
       /{(\w+)}/g,
-      (_, key) => context[key] || ""
+      (_, key: string) => enrichedContext[key as keyof ClaudeContext] || ""
     );
 
     const message = await anthropic.messages.create({
@@ -396,14 +431,7 @@ async function generateWithClaude(
     }
 
     // Parse JSON response
-    const response = JSON.parse(message.content[0].text) as ClaudeResponse;
-
-    // For overview prompts, extract relevant section
-    if (section === "studentBlurb") {
-      return response.studentBlurb || "";
-    } else if (section === "engagementBlurb") {
-      return response.engagementBlurb || "";
-    }
+    const response = JSON.parse(message.content[0].text);
 
     return response;
   } catch (error) {
@@ -474,6 +502,7 @@ export async function GET(request: Request) {
             take: 1,
             select: {
               acceptanceMessage: true,
+              description: true,
             },
           },
           studentProfileUuids: true,
@@ -522,46 +551,68 @@ export async function GET(request: Request) {
         })
       : null;
 
+    // Gather all required context for prompts
+    const context = {
+      profileText: studentProfile?.profileText || "",
+      archetypes: proposal.studentArchetypes?.join(", ") || "",
+      consultationNotes: submission?.meetingTranscript || "",
+      offeringType: proposal.offeringType || "",
+      addOns: proposal.addOnSelections?.join(", ") || "",
+      topic: proposal.topics?.name || "",
+      goals: proposal.goals || "",
+      mentorMessage: proposal.mentor_proposals[0]?.acceptanceMessage || "",
+      mentorBio: proposal.mentor_proposals[0]?.description || "",
+      grade: safeParseProfileText(studentProfile?.profileText)?.grade || "",
+      successMetrics: proposal.successMetrics?.join(", ") || "",
+      engagementGoals: proposal.engagementGoals?.join(", ") || "",
+      studentPersonality: extractPersonality(studentProfile?.profileText || ""),
+      goalTaxonomy: getGoalTaxonomy(proposal.offeringType || ""),
+    };
+
+    // Generate each section with complete context
+    const overview = (await generateWithClaude(
+      "overview",
+      context
+    )) as ClaudeResponse;
+    const synthesizedGoal = (await generateWithClaude(
+      "synthesizedGoal",
+      context
+    )) as ClaudeResponse;
+    const sessionStructure = (await generateWithClaude(
+      "sessionStructure",
+      context
+    )) as ClaudeResponse;
+    const roadmap = (await generateWithClaude(
+      "roadmap",
+      context
+    )) as ClaudeResponse;
+
     const learningPlan: LearningPlanStructure = {
-      title: `Personalized Learning Plan: ${
-        proposal.goals?.split("\n")[0] || "Student Development"
+      title: `${proposal.offeringType}: ${
+        proposal.topics?.name || "Learning Plan"
       }`,
       overview: {
-        studentBlurb: await generateStudentBlurb(
-          studentProfile?.profileText || "",
-          proposal.studentArchetypes || [],
-          submission?.meetingTranscript || ""
-        ),
-        engagementBlurb: generateEngagementBlurb(
-          proposal.offeringType || "",
-          proposal.addOnSelections || [],
-          proposal.goals?.split("\n") || [],
-          proposal.topics?.name || ""
-        ),
-        mentorFitBlurb: generateMentorFitBlurb(
-          proposal.mentor_proposals[0]?.acceptanceMessage || ""
-        ),
+        studentBlurb: overview.studentBlurb || "",
+        engagementBlurb: overview.engagementBlurb || "",
+        mentorFitBlurb: overview.mentorFitBlurb || "",
       },
       requirements: generateRequirements(
         proposal.offeringType || "",
         proposal.addOnSelections || [],
         proposal.availabilityNotes || ""
       ),
-      synthesizedGoal: generateSynthesizedGoal(
-        proposal.goals?.split("\n") || [],
-        proposal.engagementGoals || [],
-        proposal.offeringType || "",
-        proposal.addOnSelections || []
-      ),
-      sessionStructure: generateSessionStructure(
-        proposal.offeringType || "",
-        proposal.addOnSelections || []
-      ),
-      roadmap: generateRoadmap(
-        proposal.offeringType || "",
-        proposal.addOnSelections || [],
-        proposal.engagementGoals || []
-      ),
+      synthesizedGoal: {
+        highLevelGoal: synthesizedGoal.highLevelGoal || "",
+        subGoals: synthesizedGoal.subGoals || [],
+      },
+      sessionStructure: {
+        firstSessionAgenda: sessionStructure.firstSessionAgenda || [],
+        generalSessionAgenda: sessionStructure.generalSessionAgenda || [],
+      },
+      roadmap: {
+        monthlyRoadmap: roadmap.monthlyRoadmap || [],
+        weeklyRoadmap: roadmap.weeklyRoadmap || [],
+      },
     };
 
     return NextResponse.json({ data: learningPlan, error: null });
@@ -582,5 +633,38 @@ export async function GET(request: Request) {
       },
       { status: 500 }
     );
+  }
+}
+
+// Helper functions
+function extractPersonality(profileText: string): string {
+  return (
+    safeParseProfileText(profileText)?.personalityTraits ||
+    safeParseProfileText(profileText)?.learningStyle ||
+    ""
+  );
+}
+
+function getGoalTaxonomy(offeringType: string): string {
+  // Add your goal taxonomy based on offering type
+  const taxonomies = {
+    PASSION_PROJECT: "Project Development, Skill Building, Portfolio Creation",
+    ACADEMIC_MENTORSHIP: "Academic Excellence, Study Skills, Subject Mastery",
+    // Add other types as needed
+  };
+  return taxonomies[offeringType as keyof typeof taxonomies] || "";
+}
+
+function safeParseProfileText(profileText: string | null | undefined): {
+  grade?: string;
+  personalityTraits?: string;
+  learningStyle?: string;
+} {
+  try {
+    if (!profileText) return {};
+    const parsed = JSON.parse(profileText);
+    return typeof parsed === "object" ? parsed : {};
+  } catch {
+    return {};
   }
 }
