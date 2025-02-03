@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 import StudentOverview from "@/app/test4/components/StudentOverview";
 import EngagementOverview from "@/app/test4/components/EngagementOverview";
+import MentorFitOverview from "@/app/test4/components/MentorFitOverview";
 import Requirements from "@/app/test4/components/Requirements";
 import GoalsSection from "@/app/test4/components/GoalsSection";
 import SessionStructure from "@/app/test4/components/SessionStructure";
@@ -47,17 +48,24 @@ export default function LearningPlanPage({
   if (!data) return <div className="p-8">No data available</div>;
 
   return (
-    <div className="p-8 max-w-4xl mx-auto">
+    <div className="p-8 max-w-7xl mx-auto">
       <h1 className="text-3xl font-bold mb-8">{data.title}</h1>
-      <div className="space-y-8">
-        <div className="grid gap-8">
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        {/* Left Column */}
+        <div className="space-y-8">
           <StudentOverview overview={data.overview} />
           <EngagementOverview overview={data.overview} />
+          <MentorFitOverview overview={data.overview} />
+          <Requirements requirements={data.requirements} />
         </div>
-        <Requirements requirements={data.requirements} />
-        <GoalsSection goals={data.synthesizedGoal} />
-        <ProjectRoadmap roadmap={data.roadmap} />
-        <SessionStructure structure={data.sessionStructure} />
+
+        {/* Right Column */}
+        <div className="space-y-8">
+          <GoalsSection goals={data.synthesizedGoal} />
+          <ProjectRoadmap roadmap={data.roadmap} />
+          <SessionStructure structure={data.sessionStructure} />
+        </div>
       </div>
     </div>
   );

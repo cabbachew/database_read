@@ -61,10 +61,14 @@ export async function GET(request: Request) {
       : null;
 
     // Get meeting transcript
+
     const submission = proposal.studentProfileUuids?.[0]
       ? await prisma.student_profile_submissions.findFirst({
           where: {
             studentProfileUuid: proposal.studentProfileUuids[0],
+            meetingTranscript: {
+              not: null,
+            },
           },
           orderBy: {
             createdAt: "desc",
@@ -74,6 +78,8 @@ export async function GET(request: Request) {
           },
         })
       : null;
+
+    console.log("Found submission:", submission);
 
     const transformedData = {
       offeringType: proposal.offeringType || null,
