@@ -569,67 +569,66 @@ export async function GET(request: Request) {
       goalTaxonomy: getGoalTaxonomy(proposal.offeringType || ""),
     };
 
-    // Generate each section with complete context
-    const overview = (await generateWithClaude(
-      "overview",
-      context
-    )) as ClaudeResponse;
-    const synthesizedGoal = (await generateWithClaude(
-      "synthesizedGoal",
-      context
-    )) as ClaudeResponse;
-    const sessionStructure = (await generateWithClaude(
-      "sessionStructure",
-      context
-    )) as ClaudeResponse;
-    const roadmap = (await generateWithClaude(
-      "roadmap",
-      context
-    )) as ClaudeResponse;
+    // Generate each section using individual functions
+    const overview = {
+      studentBlurb: await generateStudentBlurb(
+        context.profileText || "",
+        proposal.studentArchetypes || [],
+        context.consultationNotes || ""
+      ),
+      engagementBlurb: generateEngagementBlurb(
+        proposal.offeringType || "",
+        proposal.addOnSelections || [],
+        Array.isArray(proposal.goals) ? proposal.goals : [],
+        proposal.topics?.name || ""
+      ),
+      mentorFitBlurb: generateMentorFitBlurb(
+        proposal.mentor_proposals[0]?.acceptanceMessage || ""
+      ),
+    };
 
+    const synthesizedGoal = generateSynthesizedGoal(
+      Array.isArray(proposal.goals) ? proposal.goals : [],
+      proposal.engagementGoals || [],
+      proposal.offeringType || "",
+      proposal.addOnSelections || []
+    );
+
+    const sessionStructure = generateSessionStructure(
+      proposal.offeringType || "",
+      proposal.addOnSelections || []
+    );
+
+    const roadmap = generateRoadmap(
+      proposal.offeringType || "",
+      proposal.addOnSelections || [],
+      proposal.engagementGoals || []
+    );
+
+    // Construct the complete learning plan
     const learningPlan: LearningPlanStructure = {
-      title: `${proposal.offeringType}: ${
-        proposal.topics?.name || "Learning Plan"
-      }`,
-      overview: {
-        studentBlurb: overview.studentBlurb || "",
-        engagementBlurb: overview.engagementBlurb || "",
-        mentorFitBlurb: overview.mentorFitBlurb || "",
-      },
+      title: "Learning Plan",
+      overview,
       requirements: generateRequirements(
         proposal.offeringType || "",
         proposal.addOnSelections || [],
         proposal.availabilityNotes || ""
       ),
-      synthesizedGoal: {
-        highLevelGoal: synthesizedGoal.highLevelGoal || "",
-        subGoals: synthesizedGoal.subGoals || [],
-      },
-      sessionStructure: {
-        firstSessionAgenda: sessionStructure.firstSessionAgenda || [],
-        generalSessionAgenda: sessionStructure.generalSessionAgenda || [],
-      },
-      roadmap: {
-        monthlyRoadmap: roadmap.monthlyRoadmap || [],
-        weeklyRoadmap: roadmap.weeklyRoadmap || [],
-      },
+      synthesizedGoal,
+      sessionStructure,
+      roadmap,
     };
 
     return NextResponse.json({ data: learningPlan, error: null });
   } catch (error) {
-    console.error("Error generating learning plan:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Unknown error occurred";
-    const errorDetails = error instanceof Error ? error.stack : undefined;
-
+    console.error("Failed to generate learning plan:", error);
     return NextResponse.json(
       {
         data: null,
-        error: "Failed to generate learning plan",
-        details: errorMessage,
-        timestamp: new Date().toISOString(),
-        debug:
-          process.env.NODE_ENV === "development" ? errorDetails : undefined,
+        error:
+          error instanceof Error
+            ? error.message
+            : "Failed to generate learning plan",
       },
       { status: 500 }
     );
