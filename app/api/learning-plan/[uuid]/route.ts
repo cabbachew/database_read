@@ -58,20 +58,36 @@ interface StudentProfile {
   school?: string;
 }
 
+// Add new type definitions for Claude responses
+type ClaudeContext = {
+  profileText?: string;
+  archetypes?: string;
+  consultationNotes?: string;
+  [key: string]: string | undefined;
+};
+
+type ClaudeResponse = {
+  studentBlurb?: string;
+  engagementBlurb?: string;
+  [key: string]: string | undefined;
+};
+
 async function generateStudentBlurb(
   profileText: string,
   archetypes: string[],
   transcript: string
 ): Promise<string> {
   try {
-    return await generateWithClaude("studentBlurb", {
+    const response = await generateWithClaude("studentBlurb", {
       profileText,
       archetypes: archetypes.join(", "),
       consultationNotes: transcript,
     });
+    return typeof response === "string"
+      ? response
+      : response.studentBlurb || "";
   } catch (error) {
     console.error("Failed to generate student blurb:", error);
-    // Use the fallback function when Claude API fails
     return generateFallbackStudentBlurb(profileText, archetypes);
   }
 }
@@ -356,8 +372,8 @@ function generateRoadmap(
 
 async function generateWithClaude(
   section: keyof typeof PROMPT_MAPPING,
-  context: Record<string, any>
-): Promise<any> {
+  context: ClaudeContext
+): Promise<string | ClaudeResponse> {
   try {
     const prompt = PROMPT_MAPPING[section].replace(
       /{(\w+)}/g,
@@ -366,7 +382,7 @@ async function generateWithClaude(
 
     const message = await anthropic.messages.create({
       model: "claude-3-5-sonnet-latest",
-      max_tokens: 1500, // Increased for larger structured responses
+      max_tokens: 1500,
       messages: [
         {
           role: "user",
@@ -380,13 +396,13 @@ async function generateWithClaude(
     }
 
     // Parse JSON response
-    const response = JSON.parse(message.content[0].text);
+    const response = JSON.parse(message.content[0].text) as ClaudeResponse;
 
     // For overview prompts, extract relevant section
     if (section === "studentBlurb") {
-      return response.studentBlurb;
+      return response.studentBlurb || "";
     } else if (section === "engagementBlurb") {
-      return response.engagementBlurb;
+      return response.engagementBlurb || "";
     }
 
     return response;
@@ -553,6 +569,7 @@ export async function GET(request: Request) {
     console.error("Error generating learning plan:", error);
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";
+    const errorDetails = error instanceof Error ? error.stack : undefined;
 
     return NextResponse.json(
       {
@@ -560,6 +577,8 @@ export async function GET(request: Request) {
         error: "Failed to generate learning plan",
         details: errorMessage,
         timestamp: new Date().toISOString(),
+        debug:
+          process.env.NODE_ENV === "development" ? errorDetails : undefined,
       },
       { status: 500 }
     );
