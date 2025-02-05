@@ -151,6 +151,8 @@ export async function GET(
 
     // If there's a student profile UUID, fetch it separately
     if (result?.studentProfileUuids?.[0]) {
+      console.log("Found student profile UUID:", result.studentProfileUuids[0]);
+
       const studentProfile = await prisma.student_profiles.findUnique({
         where: {
           uuid: result.studentProfileUuids[0],
@@ -161,22 +163,29 @@ export async function GET(
       });
 
       // Separate query for submissions with explicit ordering
-      const submissions = await prisma.student_profile_submissions.findFirst({
+      console.log("Querying for student profile submission...");
+      const submission = await prisma.student_profile_submissions.findFirst({
         where: {
           studentProfileUuid: result.studentProfileUuids[0],
+          meetingTranscript: { not: null },
         },
         orderBy: {
-          createdAt: "desc", // Order by creation date descending to get the latest
+          createdAt: "desc",
         },
         select: {
           meetingTranscript: true,
         },
       });
+      console.log("Submission query result:", {
+        found: !!submission,
+        hasTranscript: !!submission?.meetingTranscript,
+      });
 
       // Update transformed data
       transformedData.studentProfile = studentProfile?.profileText || null;
-      transformedData.meetingTranscript =
-        submissions?.meetingTranscript || null;
+      transformedData.meetingTranscript = submission?.meetingTranscript ?? null;
+    } else {
+      console.log("No student profile UUID found in result");
     }
 
     return NextResponse.json({ data: transformedData, error: null });
