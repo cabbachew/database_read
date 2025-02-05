@@ -2,34 +2,80 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 export default function Home() {
-  const [uuid, setUuid] = useState("");
+  const [proposalUuid, setProposalUuid] = useState("");
+  const [engagementUuid, setEngagementUuid] = useState("");
   const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleProposalSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push(`/proposal/${uuid}`);
+    if (proposalUuid.trim()) {
+      router.push(`/proposal/${proposalUuid}`);
+    }
+  };
+
+  const handleEngagementSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (engagementUuid.trim()) {
+      router.push(`/engagement/${engagementUuid}`);
+    }
   };
 
   return (
-    <div className="p-8">
-      <h1 className="text-2xl font-bold mb-4">Search Engagement Proposal</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          value={uuid}
-          onChange={(e) => setUuid(e.target.value)}
-          placeholder="Enter proposal UUID"
-          className="w-full p-2 border rounded"
-        />
-        <button
-          type="submit"
-          className="px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Search
-        </button>
-      </form>
+    <div className="p-8 max-w-4xl mx-auto">
+      <h1 className="text-2xl font-bold mb-8">Engagement Data Explorer</h1>
+
+      <div className="space-y-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Search Engagement Proposal</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleProposalSubmit} className="space-y-4">
+              <input
+                type="text"
+                value={proposalUuid}
+                onChange={(e) => setProposalUuid(e.target.value)}
+                placeholder="Enter proposal UUID"
+                className="w-full p-2 border rounded"
+              />
+              <button
+                type="submit"
+                disabled={!proposalUuid.trim()}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+              >
+                Search Proposal
+              </button>
+            </form>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Search Engagement</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <form onSubmit={handleEngagementSubmit} className="space-y-4">
+              <input
+                type="text"
+                value={engagementUuid}
+                onChange={(e) => setEngagementUuid(e.target.value)}
+                placeholder="Enter engagement UUID"
+                className="w-full p-2 border rounded"
+              />
+              <button
+                type="submit"
+                disabled={!engagementUuid.trim()}
+                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:opacity-50"
+              >
+                Search Engagement
+              </button>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 }

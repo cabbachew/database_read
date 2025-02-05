@@ -1,17 +1,18 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(request: Request) {
-  try {
-    const { pathname } = new URL(request.url);
-    const uuid = pathname.split("/").pop();
+export async function GET(
+  request: Request,
+  { params }: { params: { uuid: string } }
+) {
+  console.log("API Route hit - GET /api/proposals/[uuid]", {
+    uuid: params.uuid,
+    url: request.url,
+  });
 
-    if (!uuid) {
-      return NextResponse.json(
-        { data: null, error: "UUID parameter is required" },
-        { status: 400 }
-      );
-    }
+  try {
+    const { uuid } = params;
+    console.log("Looking up proposal in database:", uuid);
 
     const proposal = await prisma.engagement_proposals.findUnique({
       where: { uuid },
@@ -41,45 +42,18 @@ export async function GET(request: Request) {
       },
     });
 
+    console.log("Database query result:", {
+      found: !!proposal,
+      proposal: proposal || "null",
+    });
+
     if (!proposal) {
+      console.log("Proposal not found:", uuid);
       return NextResponse.json(
         { data: null, error: "Proposal not found" },
         { status: 404 }
       );
     }
-
-    // Get student profile data
-    const studentProfile = proposal.studentProfileUuids?.[0]
-      ? await prisma.student_profiles.findUnique({
-          where: {
-            uuid: proposal.studentProfileUuids[0],
-          },
-          select: {
-            profileText: true,
-          },
-        })
-      : null;
-
-    // Get meeting transcript
-
-    const submission = proposal.studentProfileUuids?.[0]
-      ? await prisma.student_profile_submissions.findFirst({
-          where: {
-            studentProfileUuid: proposal.studentProfileUuids[0],
-            meetingTranscript: {
-              not: null,
-            },
-          },
-          orderBy: {
-            createdAt: "desc",
-          },
-          select: {
-            meetingTranscript: true,
-          },
-        })
-      : null;
-
-    console.log("Found submission:", submission);
 
     const transformedData = {
       offeringType: proposal.offeringType || null,
@@ -92,13 +66,15 @@ export async function GET(request: Request) {
       successMetrics: proposal.successMetrics || [],
       acceptanceMessage:
         proposal.mentor_proposals[0]?.acceptanceMessage || null,
-      profileText: studentProfile?.profileText || null,
-      meetingTranscript: submission?.meetingTranscript || null,
     };
 
     return NextResponse.json({ data: transformedData, error: null });
   } catch (error) {
-    console.error("Error fetching proposal:", error);
+    console.error("Error in proposal API route:", {
+      error,
+      stack: error instanceof Error ? error.stack : undefined,
+      params,
+    });
     return NextResponse.json(
       { data: null, error: "Failed to fetch proposal" },
       { status: 500 }

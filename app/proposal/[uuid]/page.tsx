@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
 import React from "react";
+import { Component, ErrorInfo, ReactNode } from "react";
 
 type ProposalData = {
   offeringType: string | null;
@@ -23,28 +23,46 @@ export default function ProposalPage({
 }: {
   params: Promise<{ uuid: string }>;
 }) {
-  const router = useRouter();
   const [data, setData] = useState<ProposalData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const resolvedParams = React.use(params);
 
-  const handleGeneratePlan = () => {
-    router.push(`/learning-plan/${resolvedParams.uuid}`);
-  };
-
   useEffect(() => {
     const fetchProposal = async () => {
       try {
-        const response = await fetch(`/api/proposal/${resolvedParams.uuid}`);
+        console.log(`Fetching proposal with UUID: ${resolvedParams.uuid}`);
+        const response = await fetch(`/api/proposals/${resolvedParams.uuid}`);
+        console.log("Response status:", response.status);
+
+        const contentType = response.headers.get("content-type");
+        console.log("Response content type:", contentType);
+
         if (!response.ok) {
-          throw new Error("Failed to fetch proposal");
+          const errorText = await response.text();
+          console.error("Error response:", {
+            status: response.status,
+            statusText: response.statusText,
+            body: errorText,
+          });
+          throw new Error(
+            `Failed to fetch proposal: ${response.status} ${response.statusText}`
+          );
         }
+
         const result = await response.json();
+        console.log("Received data:", result);
         setData(result.data);
       } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
+        const errorMessage =
+          err instanceof Error ? err.message : "An error occurred";
+        console.error("Fetch error:", {
+          error: err,
+          message: errorMessage,
+          uuid: resolvedParams.uuid,
+        });
+        setError(errorMessage);
       } finally {
         setIsLoading(false);
       }
@@ -61,12 +79,6 @@ export default function ProposalPage({
     <div className="p-8 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Engagement Proposal</h1>
-        <button
-          onClick={handleGeneratePlan}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          Generate Learning Plan
-        </button>
       </div>
 
       <div className="space-y-6">
@@ -133,4 +145,43 @@ function ListCard({ title, items }: ListCardProps) {
       )}
     </div>
   );
+}
+
+interface Props {
+  children?: ReactNode;
+  fallback?: ReactNode;
+}
+
+interface State {
+  hasError: boolean;
+  error?: Error;
+}
+
+export class ErrorBoundary extends Component<Props, State> {
+  public state: State = {
+    hasError: false,
+  };
+
+  public static getDerivedStateFromError(error: Error): State {
+    return { hasError: true, error };
+  }
+
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("Uncaught error:", error, errorInfo);
+  }
+
+  public render() {
+    if (this.state.hasError) {
+      return (
+        this.props.fallback || (
+          <div className="p-4 border border-red-500 rounded bg-red-50">
+            <h2 className="text-red-700 font-semibold">Something went wrong</h2>
+            <p className="text-red-600">{this.state.error?.message}</p>
+          </div>
+        )
+      );
+    }
+
+    return this.props.children;
+  }
 }
