@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { uuid: string } }
-) {
+export async function GET(req: Request, context: { params: { uuid: string } }) {
   console.log("API Route hit - GET /api/proposals/[uuid]", {
-    uuid: params.uuid,
-    url: request.url,
+    url: req.url,
   });
 
   try {
-    const { uuid } = params;
+    const { uuid } = context.params;
     console.log("Looking up proposal in database:", uuid);
 
     const proposal = await prisma.engagement_proposals.findUnique({
@@ -73,7 +69,7 @@ export async function GET(
     console.error("Error in proposal API route:", {
       error,
       stack: error instanceof Error ? error.stack : undefined,
-      params,
+      url: req.url,
     });
     return NextResponse.json(
       { data: null, error: "Failed to fetch proposal" },
