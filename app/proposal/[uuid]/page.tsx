@@ -175,16 +175,10 @@ function GoalCard({ title, goals }: GoalCardProps) {
     <div className="p-4 bg-white rounded shadow">
       <p className="text-gray-600 mb-2">{title}:</p>
       {goals.length > 0 ? (
-        <ul className="space-y-3">
+        <ul className="list-disc pl-5">
           {goals.map((goal, i) => (
             <li key={i} className="text-gray-900">
-              <p className="font-semibold">{goal.title}</p>
-              <p className="text-sm">{goal.description}</p>
-              {goal.status && (
-                <span className="text-xs text-gray-600">
-                  Status: {goal.status}
-                </span>
-              )}
+              {goal.title}
             </li>
           ))}
         </ul>
@@ -205,19 +199,10 @@ function MetricsCard({ title, metrics }: MetricsCardProps) {
     <div className="p-4 bg-white rounded shadow">
       <p className="text-gray-600 mb-2">{title}:</p>
       {metrics.length > 0 ? (
-        <ul className="space-y-3">
+        <ul className="list-disc pl-5">
           {metrics.map((metric, i) => (
             <li key={i} className="text-gray-900">
-              <p className="font-semibold">{metric.metric}</p>
-              {metric.target && (
-                <p className="text-sm">Target: {metric.target}</p>
-              )}
-              {metric.currentValue && (
-                <p className="text-sm">Current: {metric.currentValue}</p>
-              )}
-              {metric.notes && (
-                <p className="text-sm text-gray-600">Notes: {metric.notes}</p>
-              )}
+              {metric.metric}
             </li>
           ))}
         </ul>

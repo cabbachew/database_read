@@ -43,10 +43,10 @@ type ProposalWithRelations = {
   offeringType: string | null;
   goals: string | null;
   addOnSelections: string[];
-  engagementGoals: EngagementGoal[];
+  engagementGoals: EngagementGoal[] | string[];
   studentArchetypes: string[];
   availabilityNotes: string | null;
-  successMetrics: SuccessMetric[];
+  successMetrics: SuccessMetric[] | string[];
   topics: {
     name: string | null;
   } | null;
@@ -120,10 +120,41 @@ export async function GET(
 
       // Selections and preferences
       addOnSelections: result.addOnSelections || [],
-      engagementGoals: result.engagementGoals || [],
+      engagementGoals: Array.isArray(result.engagementGoals)
+        ? result.engagementGoals.map((goal) => {
+            if (typeof goal === "string") {
+              try {
+                return JSON.parse(goal);
+              } catch {
+                return {
+                  title: goal,
+                  description: goal,
+                  status: "pending",
+                };
+              }
+            }
+            return goal;
+          })
+        : [],
       studentArchetypes: result.studentArchetypes || [],
       availabilityNotes: result.availabilityNotes || null,
-      successMetrics: result.successMetrics || [],
+      successMetrics: Array.isArray(result.successMetrics)
+        ? result.successMetrics.map((metric) => {
+            if (typeof metric === "string") {
+              try {
+                return JSON.parse(metric);
+              } catch {
+                return {
+                  metric: metric,
+                  target: null,
+                  currentValue: null,
+                  notes: null,
+                };
+              }
+            }
+            return metric;
+          })
+        : [],
 
       // Mentor information
       acceptanceMessage: result.mentor_proposals[0]?.acceptanceMessage || null,
