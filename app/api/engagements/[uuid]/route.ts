@@ -18,9 +18,12 @@ type TransformedEngagementData = {
   mentorName: string | null;
 };
 
-export async function GET(req: Request, context: { params: { uuid: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ uuid: string }> }
+) {
   try {
-    const { uuid } = context.params;
+    const { uuid } = await params;
 
     const result = await prisma.engagements.findFirst({
       where: {

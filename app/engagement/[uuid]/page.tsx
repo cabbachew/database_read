@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { EngagementDataSkeleton } from "@/app/test/loading-states";
 import React from "react";
 import {
   Accordion,
@@ -53,7 +52,7 @@ export default function EngagementPage({
     fetchEngagement();
   }, [resolvedParams.uuid]);
 
-  if (isLoading) return <EngagementDataSkeleton />;
+  if (isLoading) return <div className="p-8">Loading...</div>;
   if (error) return <div className="p-8 text-red-500">Error: {error}</div>;
   if (!data) return <div className="p-8">No data available</div>;
 

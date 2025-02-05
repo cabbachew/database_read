@@ -1,13 +1,16 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
-export async function GET(req: Request, context: { params: { uuid: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ uuid: string }> }
+) {
   console.log("API Route hit - GET /api/proposals/[uuid]", {
     url: req.url,
   });
 
   try {
-    const { uuid } = context.params;
+    const { uuid } = await params;
     console.log("Looking up proposal in database:", uuid);
 
     const proposal = await prisma.engagement_proposals.findUnique({
