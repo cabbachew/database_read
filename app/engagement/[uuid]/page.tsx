@@ -1,14 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import React from "react";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { Card } from "@/components/ui/card";
+import CopyButton from "@/app/components/CopyButton";
 
 type EngagementData = {
   title: string;
@@ -58,50 +53,18 @@ export default function EngagementPage({
 
   return (
     <div className="p-8 max-w-4xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">Engagement Details</h1>
-
-      <Accordion type="single" collapsible className="mb-6">
-        <AccordionItem value="raw-data">
-          <AccordionTrigger>Raw Engagement Data</AccordionTrigger>
-          <AccordionContent>
-            <pre className="whitespace-pre-wrap text-sm">
-              {JSON.stringify(data, null, 2)}
-            </pre>
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-
-      <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="space-y-2">
-              <dt className="font-semibold">Title</dt>
-              <dd>{data.title}</dd>
-              <dt className="font-semibold">Status</dt>
-              <dd>{data.status}</dd>
-              <dt className="font-semibold">Topic</dt>
-              <dd>{data.topic || "Not specified"}</dd>
-            </dl>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Participants</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <dl className="space-y-2">
-              <dt className="font-semibold">Student</dt>
-              <dd>{data.studentName || "Not specified"}</dd>
-              <dt className="font-semibold">Mentor</dt>
-              <dd>{data.mentorName || "Not specified"}</dd>
-            </dl>
-          </CardContent>
-        </Card>
-      </div>
+      <h1 className="text-2xl font-bold mb-6">Engagement Data</h1>
+      <Card className="p-6">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-semibold text-gray-900">
+            Engagement Info
+          </h2>
+          <CopyButton textToCopy={JSON.stringify(data, null, 2)} />
+        </div>
+        <pre className="whitespace-pre-wrap text-gray-700 font-mono text-sm">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      </Card>
     </div>
   );
 }

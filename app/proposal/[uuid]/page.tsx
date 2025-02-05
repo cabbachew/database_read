@@ -3,17 +3,38 @@
 import { useState, useEffect } from "react";
 import React from "react";
 
+type EngagementGoal = {
+  title: string;
+  description: string;
+  status?: "pending" | "in_progress" | "completed";
+};
+
+type SuccessMetric = {
+  metric: string;
+  target?: string | number;
+  currentValue?: string | number;
+  notes?: string;
+};
+
 type ProposalData = {
+  // Basic proposal info
   offeringType: string | null;
   pitchDescription: string | null;
   topic: string | null;
+
+  // Selections and preferences
   addOnSelections: string[];
-  engagementGoals: string[];
+  engagementGoals: EngagementGoal[];
   studentArchetypes: string[];
   availabilityNotes: string | null;
-  successMetrics: string[];
+  successMetrics: SuccessMetric[];
+
+  // Mentor information
   acceptanceMessage: string | null;
-  profileText: string | null;
+  mentorBio: string | null;
+
+  // Student information
+  studentProfile: string | null;
   meetingTranscript: string | null;
 };
 
@@ -33,29 +54,24 @@ export default function ProposalPage({
       try {
         console.log(`Fetching proposal with UUID: ${resolvedParams.uuid}`);
         const response = await fetch(`/api/proposals/${resolvedParams.uuid}`);
-        console.log("Response status:", response.status);
-
-        const contentType = response.headers.get("content-type");
-        console.log("Response content type:", contentType);
 
         if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Error response:", {
-            status: response.status,
-            statusText: response.statusText,
-            body: errorText,
-          });
+          const errorData = await response.json().catch(() => ({}));
           throw new Error(
-            `Failed to fetch proposal: ${response.status} ${response.statusText}`
+            errorData.error ||
+              `HTTP error! status: ${response.status} ${response.statusText}`
           );
         }
 
         const result = await response.json();
-        console.log("Received data:", result);
+        if (!result.data) {
+          throw new Error("No data received from server");
+        }
+
         setData(result.data);
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "An error occurred";
+          err instanceof Error ? err.message : "An unexpected error occurred";
         console.error("Fetch error:", {
           error: err,
           message: errorMessage,
@@ -88,17 +104,20 @@ export default function ProposalPage({
         <DataCard title="Pitch Description" value={data.pitchDescription} />
         <DataCard title="Availability Notes" value={data.availabilityNotes} />
         <ListCard title="Add-On Selections" items={data.addOnSelections} />
-        <ListCard title="Engagement Goals" items={data.engagementGoals} />
+        <GoalCard title="Engagement Goals" goals={data.engagementGoals} />
         <ListCard title="Student Archetypes" items={data.studentArchetypes} />
-        <ListCard title="Success Metrics" items={data.successMetrics} />
+        <MetricsCard title="Success Metrics" metrics={data.successMetrics} />
         {data.acceptanceMessage && (
           <DataCard
             title="Mentor Acceptance Message"
             value={data.acceptanceMessage}
           />
         )}
-        {data.profileText && (
-          <DataCard title="Student Profile" value={data.profileText} />
+        {data.mentorBio && (
+          <DataCard title="Mentor Biography" value={data.mentorBio} />
+        )}
+        {data.studentProfile && (
+          <DataCard title="Student Profile" value={data.studentProfile} />
         )}
         {data.meetingTranscript && (
           <DataCard title="Meeting Transcript" value={data.meetingTranscript} />
@@ -136,6 +155,69 @@ function ListCard({ title, items }: ListCardProps) {
           {items.map((item, i) => (
             <li key={i} className="text-gray-900">
               {item}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-900">None specified</p>
+      )}
+    </div>
+  );
+}
+
+type GoalCardProps = {
+  title: string;
+  goals: EngagementGoal[];
+};
+
+function GoalCard({ title, goals }: GoalCardProps) {
+  return (
+    <div className="p-4 bg-white rounded shadow">
+      <p className="text-gray-600 mb-2">{title}:</p>
+      {goals.length > 0 ? (
+        <ul className="space-y-3">
+          {goals.map((goal, i) => (
+            <li key={i} className="text-gray-900">
+              <p className="font-semibold">{goal.title}</p>
+              <p className="text-sm">{goal.description}</p>
+              {goal.status && (
+                <span className="text-xs text-gray-600">
+                  Status: {goal.status}
+                </span>
+              )}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="text-gray-900">None specified</p>
+      )}
+    </div>
+  );
+}
+
+type MetricsCardProps = {
+  title: string;
+  metrics: SuccessMetric[];
+};
+
+function MetricsCard({ title, metrics }: MetricsCardProps) {
+  return (
+    <div className="p-4 bg-white rounded shadow">
+      <p className="text-gray-600 mb-2">{title}:</p>
+      {metrics.length > 0 ? (
+        <ul className="space-y-3">
+          {metrics.map((metric, i) => (
+            <li key={i} className="text-gray-900">
+              <p className="font-semibold">{metric.metric}</p>
+              {metric.target && (
+                <p className="text-sm">Target: {metric.target}</p>
+              )}
+              {metric.currentValue && (
+                <p className="text-sm">Current: {metric.currentValue}</p>
+              )}
+              {metric.notes && (
+                <p className="text-sm text-gray-600">Notes: {metric.notes}</p>
+              )}
             </li>
           ))}
         </ul>

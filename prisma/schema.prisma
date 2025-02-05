@@ -258,6 +258,7 @@ model engagement_proposals {
   engagements               engagements[]
   learning_planners         learning_planners?
   mentor_proposals          mentor_proposals[]
+  order_analytics           order_analytics?
 
   @@index([createdBy])
   @@index([deletedAt])
@@ -382,6 +383,7 @@ model engagements {
   pauseEngagementResumeAt     DateTime?
   isAdhoc                     Boolean                       @default(false)
   rematchEngagementUuid       String?
+  lastAttachedHubspotDealId   String?
   calendar_events             calendar_events[]
   engagement_pause_requests   engagement_pause_requests[]
   engagement_recaps           engagement_recaps[]
@@ -1111,6 +1113,12 @@ model session_assets {
   diarizedAssemblyTranscript Json[]
   botDeletedAt               DateTime?
   summaryCreatedAt           DateTime?
+  deadSpaceSeconds           Int?
+  deadSpaceSecondsPercent    Int?
+  menteeTalkTime             Int?
+  menteeTalkTimePercent      Int?
+  mentorTalkTime             Int?
+  mentorTalkTimePercent      Int?
   calendar_events            calendar_events      @relation(fields: [calendarEventUuid], references: [uuid])
   session_structures         session_structures[]
 }
@@ -1385,6 +1393,60 @@ model users_engagements {
   users          users       @relation(fields: [userUuid], references: [uuid])
 
   @@id([userUuid, engagementUuid])
+}
+
+model engagement_metrics {
+  id                      Int      @id @default(autoincrement())
+  uuid                    String   @unique
+  engagementUuid          String?
+  deadSpaceSeconds        Int      @default(0)
+  deadSpaceSecondsPercent Int      @default(0)
+  mentorTalkTime          Int      @default(0)
+  mentorTalkTimePercent   Int      @default(0)
+  menteeTalkTime          Int      @default(0)
+  menteeTalkTimePercent   Int      @default(0)
+  completedCalendarEvents Int      @default(0)
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime
+}
+
+model order_analytics {
+  id                          Int                  @id @default(autoincrement())
+  uuid                        String               @unique
+  engagementProposalUuid      String               @unique
+  mentorSourcingStartedAt     DateTime?
+  mentorSourcingEndedAt       DateTime?
+  exhaustedPitchCount         Int                  @default(0)
+  mentorMatchingCheckoutCount Int                  @default(0)
+  engagement_proposals        engagement_proposals @relation(fields: [engagementProposalUuid], references: [uuid])
+}
+
+model weekly_customer_reports {
+  id                         Int      @id @default(autoincrement())
+  uuid                       String   @unique
+  userUuid                   String
+  year                       Int
+  month                      Int
+  weekOfYear                 Int
+  hasActiveEngagement        Boolean
+  hasCompletedSession        Boolean
+  sessionMinutes             Int
+  stripeSpendAmount          Int?
+  stripeSpendAmountCurrency  String?
+  stripeRefundAmount         Int?
+  stripeRefundAmountCurrency String?
+  activeEngagementCount      Int
+  activeStudentCount         Int
+  distinctMentorCount        Int
+  activeSubscriptionCount    Int
+  inAppCreditAmount          Int
+  completedSessionCount      Int
+  canceledSessionCount       Int
+  rescheduledSessionCount    Int
+  createdAt                  DateTime @default(now())
+  updatedAt                  DateTime
+
+  @@unique([userUuid, year, month, weekOfYear])
 }
 
 enum InvoiceStatus {
