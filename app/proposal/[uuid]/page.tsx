@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import React from "react";
+import CopyButton from "@/app/components/CopyButton";
 
 type EngagementGoal = {
   title: string;
@@ -94,6 +95,7 @@ export default function ProposalPage({
     <div className="p-8 max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Engagement Proposal</h1>
+        <CopyButton textToCopy={JSON.stringify(data, null, 2)} />
       </div>
 
       <div className="space-y-6">
