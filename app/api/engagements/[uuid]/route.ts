@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-
+import { JsonValue } from "@prisma/client/runtime/library";
 // Define specific types for the metrics and goals
 type StructuredGoal = {
   title: string;
@@ -48,6 +48,7 @@ type TransformedEngagementData = {
   sessionDates: string[];
   sessionNotes: string[];
   sessionSummaries: string[];
+  sessionTranscripts: JsonValue[];
 
   // User information
   studentName: string | null;
@@ -107,7 +108,12 @@ export async function GET(
             start: "asc",
           },
           include: {
-            session_assets: true,
+            session_assets: {
+              select: {
+                summary: true,
+                diarizedTranscript: true,
+              },
+            },
           },
         },
         engagement_reports: {
@@ -186,13 +192,12 @@ export async function GET(
       sessionNotes: completedEvents
         .map((event) => event.description ?? "")
         .filter(Boolean),
-      sessionSummaries: completedEvents
-        .flatMap((event) =>
-          Array.isArray(event.session_assets)
-            ? event.session_assets.map((asset) => asset.summary ?? "")
-            : []
-        )
-        .filter(Boolean),
+      sessionSummaries: completedEvents.flatMap((event) =>
+        event.session_assets?.summary ? [event.session_assets.summary] : []
+      ),
+      sessionTranscripts: completedEvents.flatMap(
+        (event) => event.session_assets?.diarizedTranscript || []
+      ),
 
       // User information
       studentName: studentUser?.fullName ?? null,
