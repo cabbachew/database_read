@@ -190,8 +190,13 @@ export async function GET(
       sessionCount: completedEvents.length,
       sessionDates: completedEvents.map((event) => event.start.toISOString()),
       sessionNotes: completedEvents
-        .map((event) => event.description ?? "")
-        .filter(Boolean),
+        .filter(
+          (
+            event
+          ): event is typeof event & { session_assets: { summary: string } } =>
+            Boolean(event.session_assets?.summary)
+        )
+        .map((event) => event.session_assets.summary),
       sessionSummaries: completedEvents.flatMap((event) =>
         event.session_assets?.summary ? [event.session_assets.summary] : []
       ),

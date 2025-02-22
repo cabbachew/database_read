@@ -11,8 +11,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 
- 
-
 type StructuredGoal = {
   title: string;
   description: string;
@@ -46,6 +44,7 @@ type EngagementData = {
   firstSessionDate: string;
   sessionCount: number;
   sessionDates: string[];
+  sessionNotes: string[];
 };
 
 function formatDate(dateString: string) {
@@ -56,8 +55,17 @@ function formatDate(dateString: string) {
   });
 }
 
-function formatDateShort(dateString: string) {
-  return new Date(dateString).toISOString().split("T")[0]; // Returns YYYY-MM-DD
+function formatDateShort(dateString: string): string {
+  try {
+    const date = new Date(dateString);
+    // Check if date is valid
+    if (isNaN(date.getTime())) {
+      return "Invalid date";
+    }
+    return date.toISOString().split("T")[0]; // Returns YYYY-MM-DD
+  } catch {
+    return "Invalid date";
+  }
 }
 
 function formatValue(value: unknown): string {
@@ -66,6 +74,10 @@ function formatValue(value: unknown): string {
     // Check if it's a date string
     if (value.match(/^\d{4}-\d{2}-\d{2}T/)) {
       try {
+        const date = new Date(value);
+        if (isNaN(date.getTime())) {
+          return value;
+        }
         return formatDate(value);
       } catch {
         return value;
@@ -80,7 +92,16 @@ function formatValue(value: unknown): string {
     value[0].match(/^\d{4}-\d{2}-\d{2}T/)
   ) {
     // Special handling for array of dates
-    return value.map((date) => formatDateShort(date)).join("; ");
+    return value
+      .map((date) => {
+        try {
+          return formatDateShort(date);
+        } catch {
+          return date;
+        }
+      })
+      .filter((date) => date !== "Invalid date")
+      .join("; ");
   }
   if (typeof value === "object") {
     try {
@@ -162,6 +183,7 @@ export default function EngagementPage({
                   successMetrics: data.successMetrics,
                   sessionCount: data.sessionCount,
                   sessionDates: data.sessionDates.map(formatDateShort),
+                  sessionNotes: data.sessionNotes,
                 },
                 null,
                 2
@@ -245,6 +267,18 @@ export default function EngagementPage({
                 <div>
                   <strong>Session Dates:</strong>{" "}
                   {data.sessionDates.map(formatDateShort).join("; ")}
+                </div>
+              )}
+              {data.sessionNotes.length > 0 && (
+                <div>
+                  <strong>Session Notes:</strong>
+                  <div className="ml-4 mt-2">
+                    {data.sessionNotes.map((note, index) => (
+                      <div key={index} className="text-gray-600">
+                        • {note}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
