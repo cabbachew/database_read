@@ -107,7 +107,11 @@ export async function GET(
           orderBy: {
             start: "asc",
           },
-          include: {
+          select: {
+            start: true,
+            end: true,
+            status: true,
+            description: true,
             session_assets: {
               select: {
                 summary: true,
@@ -190,13 +194,8 @@ export async function GET(
       sessionCount: completedEvents.length,
       sessionDates: completedEvents.map((event) => event.start.toISOString()),
       sessionNotes: completedEvents
-        .filter(
-          (
-            event
-          ): event is typeof event & { session_assets: { summary: string } } =>
-            Boolean(event.session_assets?.summary)
-        )
-        .map((event) => event.session_assets.summary),
+        .filter((event) => Boolean(event.description))
+        .map((event) => event.description as string),
       sessionSummaries: completedEvents.flatMap((event) =>
         event.session_assets?.summary ? [event.session_assets.summary] : []
       ),
