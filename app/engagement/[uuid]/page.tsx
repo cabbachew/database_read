@@ -163,6 +163,7 @@ export default function EngagementPage({
             <CopyButton
               textToCopy={JSON.stringify(
                 {
+                  uuid: resolvedParams.uuid,
                   engagementTitle: data.engagementTitle,
                   engagementDescription: data.engagementDescription,
                   created: data.engagementCreatedAt,
@@ -192,6 +193,9 @@ export default function EngagementPage({
           </div>
           <div className="bg-gray-50 p-4 rounded-lg text-sm text-gray-700">
             <div className="grid grid-cols-1 gap-2">
+              <div>
+                <strong>UUID:</strong> {resolvedParams.uuid}
+              </div>
               <div>
                 <strong>Engagement Title:</strong>{" "}
                 {formatValue(data.engagementTitle)}
@@ -293,10 +297,20 @@ export default function EngagementPage({
               </AccordionTrigger>
               <AccordionContent>
                 <div className="flex justify-end mb-2">
-                  <CopyButton textToCopy={JSON.stringify(data, null, 2)} />
+                  <CopyButton
+                    textToCopy={JSON.stringify(
+                      { uuid: resolvedParams.uuid, ...data },
+                      null,
+                      2
+                    )}
+                  />
                 </div>
                 <pre className="whitespace-pre-wrap text-gray-700 font-mono text-sm bg-gray-50 p-4 rounded-lg">
-                  {JSON.stringify(data, null, 2)}
+                  {JSON.stringify(
+                    { uuid: resolvedParams.uuid, ...data },
+                    null,
+                    2
+                  )}
                 </pre>
               </AccordionContent>
             </AccordionItem>
