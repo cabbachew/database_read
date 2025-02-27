@@ -45,6 +45,20 @@ type EngagementData = {
   sessionCount: number;
   sessionDates: string[];
   sessionNotes: string[];
+  lastName: string;
+  userUuid: string;
+  firstName: string;
+  endSeconds: number;
+  startSeconds: number;
+  sessionTranscripts?: {
+    lastName?: string;
+    userUuid?: string;
+    firstName?: string;
+    endSeconds?: number;
+    startSeconds?: number;
+    text: string;
+    isMentor: boolean;
+  }[];
 };
 
 function formatDate(dateString: string) {
@@ -299,7 +313,19 @@ export default function EngagementPage({
                 <div className="flex justify-end mb-2">
                   <CopyButton
                     textToCopy={JSON.stringify(
-                      { uuid: resolvedParams.uuid, ...data },
+                      (() => {
+                        const filteredData = { ...data };
+                        if (filteredData.sessionTranscripts) {
+                          filteredData.sessionTranscripts =
+                            filteredData.sessionTranscripts.map(
+                              (transcript) => ({
+                                text: transcript.text,
+                                isMentor: transcript.isMentor,
+                              })
+                            );
+                        }
+                        return { uuid: resolvedParams.uuid, ...filteredData };
+                      })(),
                       null,
                       2
                     )}
