@@ -22,9 +22,12 @@ export function middleware(req: NextRequest) {
 
   let decoded: string;
   try {
-    decoded = new TextDecoder().decode(Uint8Array.from(atob(encoded), (c) => c.charCodeAt(0)));
+    // fatal:true rejects malformed UTF-8 outright instead of substituting U+FFFD
+    decoded = new TextDecoder("utf-8", { fatal: true }).decode(
+      Uint8Array.from(atob(encoded), (c) => c.charCodeAt(0)),
+    );
   } catch {
-    return unauthorized(); // malformed base64 -> 401, not 500
+    return unauthorized(); // malformed base64 or UTF-8 -> 401, not 500
   }
 
   const sep = decoded.indexOf(":"); // split on FIRST colon (password may contain colons)
